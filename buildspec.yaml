@@ -1,0 +1,11 @@
+version: 0.1
+phases:
+  install:
+    commands:
+      - npm install time
+      - aws cloudformation package --template-file tweet_analysis.yaml --s3-bucket tweet-analyzer 
+                                   --output-template-file analyzer_template.yaml
+artifacts:
+  type: zip
+  files:
+    - analyzer_template.yaml

@@ -1,0 +1,417 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: State Machine for analyzing tweet sentiment by text and image
+
+Parameters:
+
+  TweetBucketName:
+    Description: "S3 Bucket to store raw and processed tweets"
+    Type: "String"
+  
+  ComparisonImage:
+    Description: "S3 location of the image to use as a comparison"
+    Type: "String"
+  
+  MaxLabelDetection:
+    Description: "Max Labels Recognition should detect"
+    Type: "Number"
+  
+  MinLabelConfidence:
+    Description: "Minimum Confidence on label detection between 0-100"
+    Type: "Number"
+
+Resources:
+  RawTweetStream:
+    Type: AWS::Kinesis::Stream
+    Properties:
+      ShardCount: 1
+
+  TweetS3Bucket:
+      Type: "AWS::S3::Bucket"
+      Properties: 
+          BucketName: !Ref TweetBucketname
+
+  RawTweetDeliveryStreamRole:
+      Type: "AWS::IAM::Role"
+      Properties: 
+          AssumeRolePolicyDocument: 
+              Version: "2012-10-17"
+              Statement: 
+              - 
+                  Effect: "Allow"
+                  Principal: 
+                      Service: 
+                          - "firehose.amazonaws.com"
+                  Action: 
+                  - "sts:AssumeRole"
+          ManagedPolicyArns:
+              - "arn:aws:iam::aws:policy/AmazonS3FullAccess"
+          RoleName: "RawTweetDeliveryStreamRole"
+
+  TweetS3BucketPolicy:
+    Type: "AWS::S3::BucketPolicy"
+    Properties:
+      Bucket: !Ref TweetS3Bucket
+      PolicyDocument:
+        Statement:
+          -
+            Action:
+              - "s3:Get*"
+              - "s3:List*"
+            Effect: "Allow"
+            Principal: "*"
+            Resource:
+              - !Join [ "", [ "arn:aws:s3:::", !Ref TweetS3Bucket ] ]
+              - !Join [ "", [ "arn:aws:s3:::", !Ref TweetS3Bucket, "/*" ] ]
+
+  RawTweetKinesisFirehose:
+    Type: "AWS::KinesisFirehose::DeliveryStream"
+    DependsOn: TweetS3BucketPolicy
+    Properties:
+      S3DestinationConfiguration:
+        BucketARN: !Join [ "", [ "arn:aws:s3:::", !Ref TweetS3BucketPolicy ] ]
+        BufferingHints:
+          IntervalInSeconds: 60 # amount of seconds to wait before persisting
+          SizeInMBs: 1 # setting small for a basic test
+        CompressionFormat: "GZIP" # in real life, we would both encrypt & compress this data
+        RoleARN: !GetAtt RawTweetDeliveryStreamRole.Arn
+        Prefix: "raw/"
+        CloudWatchLoggingOptions:
+          Enabled: true
+          LogGroupName: !Ref FirehoseLoggingLogGroup
+          LogStreamName: !Ref FirehoseLogStream
+
+  ProcessedTweetKinesisFirehose:
+    Type: "AWS::KinesisFirehose::DeliveryStream"
+    DependsOn: TweetS3BucketPolicy
+    Properties:
+      S3DestinationConfiguration:
+        BucketARN: !Join [ "", [ "arn:aws:s3:::", !Ref TweetS3BucketPolicy ] ]
+        BufferingHints:
+          IntervalInSeconds: 60 # amount of seconds to wait before persisting
+          SizeInMBs: 1 # setting small for a basic test
+        CompressionFormat: "GZIP" # in real life, we would both encrypt & compress this data
+        RoleARN: !GetAtt RawTweetDeliveryStreamRole.Arn
+        Prefix: "processed/"
+        CloudWatchLoggingOptions:
+          Enabled: true
+          LogGroupName: !Ref FirehoseLoggingLogGroup
+          LogStreamName: !Ref FirehoseLogStream
+
+  FirehoseLoggingLogGroup:
+    Type: "AWS::Logs::LogGroup"
+    Properties:
+      RetentionInDays: 3
+
+  FirehoseLogStream:
+    Type: "AWS::Logs::LogStream"
+    Properties:
+      LogGroupName: !Ref FirehoseLoggingLogGroup
+      
+  ProcessRawTweetStreamRole:
+      Type: "AWS::IAM::Role"
+      Properties:
+          Path: "/"
+          AssumeRolePolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              -
+                Sid: "AllowLambdaServiceToAssumeRole"
+                Effect: "Allow"
+                Action:
+                  - "sts:AssumeRole"
+                Principal:
+                  Service:
+                    - "lambda.amazonaws.com"
+          Policies:
+            -
+              PolicyName: "InlinePolicy"
+              PolicyDocument:
+                Version: "2012-10-17"
+                Statement:
+                  -
+                    Effect: "Allow"
+                    Action:
+                      - "kinesis:ListStreams"
+                    Resource: "arn:aws:kinesis:*:*:streams/*"
+                  -
+                    Effect: "Allow"
+                    Action:
+                      - "kinesis:DescribeStream"
+                      - "kinesis:GetRecords"
+                      - "kinesis:GetShardIterator"
+                    Resource: !GetAtt RawTweetKinesisFirehose.Arn
+                  -
+                    Effect: "Allow"
+                    Action:
+                      - "logs:CreateLogGroup"
+                      - "logs:CreateLogStream"
+                      - "logs:PutLogEvents"
+                    Resource: "arn:aws:logs:*:*:*"     
+
+  ProcessAnalyzedTweetStreamRole:
+      Type: "AWS::IAM::Role"
+      Properties:
+          Path: "/"
+          AssumeRolePolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              -
+                Sid: "AllowLambdaServiceToAssumeRole"
+                Effect: "Allow"
+                Action:
+                  - "sts:AssumeRole"
+                Principal:
+                  Service:
+                    - "lambda.amazonaws.com"
+          Policies:
+            -
+              PolicyName: "InlinePolicy"
+              PolicyDocument:
+                Version: "2012-10-17"
+                Statement:
+                  -
+                    Effect: "Allow"
+                    Action:
+                      - "kinesis:ListStreams"
+                    Resource: "arn:aws:kinesis:*:*:streams/*"
+                  -
+                    Effect: "Allow"
+                    Action:
+                      - "kinesis:DescribeStream"
+                      - "kinesis:GetRecords"
+                      - "kinesis:GetShardIterator"
+                    Resource: !GetAtt ProcessedTweetKinesisFirehose.Arn
+                  -
+                    Effect: "Allow"
+                    Action:
+                      - "logs:CreateLogGroup"
+                      - "logs:CreateLogStream"
+                      - "logs:PutLogEvents"
+                    Resource: "arn:aws:logs:*:*:*"         
+
+  LambdaFunctionIAMRole:
+      Type: "AWS::IAM::Role"
+      Properties:
+          Path: "/"
+          AssumeRolePolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              -
+                Sid: "AllowLambdaServiceToAssumeRole"
+                Effect: "Allow"
+                Action:
+                  - "sts:AssumeRole"
+                Principal:
+                  Service:
+                    - "lambda.amazonaws.com"
+          Policies:
+            -
+              PolicyName: "InlinePolicy"
+              PolicyDocument:
+                Version: "2012-10-17"
+                Statement:
+                  -
+                    Effect: "Allow"
+                    Action:
+                      - "logs:CreateLogGroup"
+                      - "logs:CreateLogStream"
+                      - "logs:PutLogEvents"
+                    Resource: "arn:aws:logs:*:*:*"
+                  -
+                    Effect: "Allow"
+                    Action:
+                      - "ec2:*"
+                      - "iam:*"
+                      - "cloudformation:*"
+                      - "logs:*"
+                    Resource: "*"
+
+  CompareFacesWithOwn:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: Compare-Faces-With-Own
+      Handler: index.handler
+      Runtime: python2.7
+      CodeUri: ./src/CompareFacesWithOwn
+      Role: !GetAtt LambdaFunctionIAMRole.Arn
+      Timeout: 60
+      Environment:
+        Variables: 
+          FACE_COMPARISION_S3_BUCKET: !Ref ComparisonImage
+          AWS_DEFAULT_REGION: !Ref AWS::Region
+  DetectMediaFaces:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: Detect-Media-Faces
+      Handler: index.handler
+      Runtime: python2.7
+      CodeUri: ./src/DetectMediaFaces
+      Role: !GetAtt LambdaFunctionIAMRole.Arn
+      Timeout: 60
+      Environment:
+        Variables: 
+          AWS_DEFAULT_REGION: !Ref AWS::Region
+  DetectMediaLabels:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: Detect-Media-Labels
+      Handler: index.handler
+      Runtime: python2.7
+      CodeUri: ./src/DetectMediaLabels
+      Role: !GetAtt LambdaFunctionIAMRole.Arn
+      Timeout: 60
+      Environment:
+        Variables: 
+          MAX_LABELS: !Ref MaxLabelDetection
+          MIN_CONFIDENCE: !Ref MinLabelConfidence
+          AWS_DEFAULT_REGION: !Ref AWS::Region
+  GetTweetSentiment:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: Get-Tweet-Sentiment
+      Handler: index.handler
+      Runtime: python2.7
+      CodeUri: ./src/GetTweetSentiment/
+      Role: !GetAtt LambdaFunctionIAMRole.Arn
+      Timeout: 60
+  SendMatchNotification:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: Send-Match-Notification
+      Handler: index.handler
+      Runtime: python2.7
+      CodeUri: ./src/SendMatchNotification
+      Role: !GetAtt LambdaFunctionIAMRole.Arn
+      Timeout: 60
+  ProcessRawTweets:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: Process-Raw-Tweets
+      Handler: index.handler
+      Runtime: python2.7
+      CodeUri: ./src/ProcessRawTweets
+      Role: !GetAtt ProcessRawTweetStreamRole.Arn
+      Timeout: 60
+      Environment:
+        Variables: 
+          DELIVERY_STREAM_NAME: !GetAtt RawTweetKinesisFirehose.Name
+          AWS_DEFAULT_REGION: !Ref AWS::Region
+      Events:
+        Stream:
+          Type: Kinesis
+          Properties:
+            Stream: !GetAtt RawTweetStream.Arn
+            BatchSize: 100
+            StartingPosition: TRIM_HORIZON
+  PushToFirehose:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: Push-To-Firehose
+      Handler: index.handler
+      Runtime: python2.7
+      CodeUri: ./src/PushToFirehose
+      Role: !GetAtt LambdaFunctionIAMRole.Arn
+      Timeout: 60
+      Environment:
+        Variables: 
+          DELIVERY_STREAM_NAME: !GetAtt ProcessedTweetKinesisFirehose.Name
+          AWS_DEFAULT_REGION: !Ref AWS::Region
+
+  StateMachineIAMRole:
+      Type: "AWS::IAM::Role"
+      Properties:
+          Path: "/"
+          AssumeRolePolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              -
+                Effect: "Allow"
+                Action:
+                  - "sts:AssumeRole"
+                Principal:
+                  Service:
+                    - !Join
+                      - "."
+                      - - states
+                        - !Ref AWS::Region
+                        - "amazonaws.com"
+          Policies:
+            -
+              PolicyName: "InlinePolicy"
+              PolicyDocument:
+                Version: "2012-10-17"
+                Statement:
+                  -
+                    Effect: "Allow"
+                    Action:
+                      - "lambda:InvokeFunction"
+                    Resource: "*"
+
+  TweetAnalysisStateMachine:
+    Type: AWS::StepFunctions::StateMachine
+    Properties:
+      DefinitionString: |-
+        {
+          "Comment": "Analyze the tweet text sentiment and the sentiment of any media associated with the tweet",
+          "StartAt": "GetTweetSentiment",
+          "States": {
+            "GetTweetSentiment": {
+              "Type": "Task",
+              "Resource": "arn:aws:lambda:AWS::REGION:AWS::ACCOUNT_ID:function:Get-Tweet-Sentiment",
+              "Next": "GetMediaLabels"
+            },
+            "GetMediaLabels": {
+              "Type": "Task",
+              "Resource": "arn:aws:lambda:AWS::REGION:AWS::ACCOUNT_ID:function:Detect-Media-Labels",
+              "InputPath": "$",
+              "Next": "HasPeopleChoiceState"
+            },
+            "HasPeopleChoiceState": {
+              "Type" : "Choice",
+              "Choices": [
+                {
+                  "Variable": "$.num_of_regions",
+                  "NumericGreaterThan": 0,
+                  "Next": "GetMediaFaces"
+                }
+              ],
+              "Default": "PushToFirehose"
+            },
+            "GetMediaFaces": {
+              "Type": "Task",
+              "Resource": "arn:aws:lambda:AWS::REGION:AWS::ACCOUNT_ID:function:Detect-Media-Faces",
+              "InputPath": "$",
+              "Next": "CompareFacesWithOwn"
+            },
+            "CompareFacesWithOwn": {
+              "Type": "Task",
+              "Resource": "arn:aws:lambda:AWS::REGION:AWS::ACCOUNT_ID:function:Compare-Faces-With-Own",
+              "InputPath": "$",
+              "Next": "MatchedChoiceState"
+            },
+            "MatchedChoiceState": {
+              "Type" : "Choice",
+              "Choices": [
+                {
+                  "Variable": "$.match_confidence",
+                  "NumericGreaterThan": 90,
+                  "Next": "SendMatchNotification"
+                }
+              ],
+              "Default": "PushToFirehose"
+            },
+            "SendMatchNotification": {
+              "Type": "Task",
+              "Resource": "arn:aws:lambda:AWS::REGION:AWS::ACCOUNT_ID:function:Send-Match-Notification",
+              "InputPath": "$",
+              "Next": "PushToFirehose"
+            },
+            "PushToFirehose": {
+              "Type" : "Task",
+              "Resource": "arn:aws:lambda:AWS::REGION:AWS::ACCOUNT_ID:function:Push-To-Firehose",
+              "End": true
+            }
+          }
+        }
+      RoleArn: !GetAtt StateMachineIAMRole.Arn

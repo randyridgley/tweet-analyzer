@@ -1,0 +1,8 @@
+{
+  "Parameters" : {
+    "TweetBucketName" : "tweet-analyzer-working",
+    "ComparisonImage" : "s3://somebucket/someimage.jpg",
+    "MaxLabelDetection" : 10,
+    "MinLabelConfidence" : 90
+  }
+}
