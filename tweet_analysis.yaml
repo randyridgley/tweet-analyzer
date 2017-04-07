@@ -31,23 +31,6 @@ Resources:
       Properties: 
           BucketName: !Ref TweetBucketname
 
-  RawTweetDeliveryStreamRole:
-      Type: "AWS::IAM::Role"
-      Properties: 
-          AssumeRolePolicyDocument: 
-              Version: "2012-10-17"
-              Statement: 
-              - 
-                  Effect: "Allow"
-                  Principal: 
-                      Service: 
-                          - "firehose.amazonaws.com"
-                  Action: 
-                  - "sts:AssumeRole"
-          ManagedPolicyArns:
-              - "arn:aws:iam::aws:policy/AmazonS3FullAccess"
-          RoleName: "RawTweetDeliveryStreamRole"
-
   TweetS3BucketPolicy:
     Type: "AWS::S3::BucketPolicy"
     Properties:
@@ -74,7 +57,7 @@ Resources:
           IntervalInSeconds: 60 # amount of seconds to wait before persisting
           SizeInMBs: 1 # setting small for a basic test
         CompressionFormat: "GZIP" # in real life, we would both encrypt & compress this data
-        RoleARN: !GetAtt RawTweetDeliveryStreamRole.Arn
+        RoleARN: !GetAtt ProcessRawTweetStreamRole.Arn
         Prefix: "raw/"
         CloudWatchLoggingOptions:
           Enabled: true
@@ -91,7 +74,7 @@ Resources:
           IntervalInSeconds: 60 # amount of seconds to wait before persisting
           SizeInMBs: 1 # setting small for a basic test
         CompressionFormat: "GZIP" # in real life, we would both encrypt & compress this data
-        RoleARN: !GetAtt RawTweetDeliveryStreamRole.Arn
+        RoleARN: !GetAtt ProcessAnalyzedTweetStreamRole.Arn
         Prefix: "processed/"
         CloudWatchLoggingOptions:
           Enabled: true
