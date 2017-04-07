@@ -21,6 +21,127 @@ Parameters:
     Type: "Number"
 
 Resources:
+  ProcessRawTweetStreamRole:
+      Type: "AWS::IAM::Role"
+      Properties:
+          Path: "/"
+          AssumeRolePolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Sid: "AllowLambdaServiceToAssumeRole"
+                Effect: "Allow"
+                Action:
+                  - "sts:AssumeRole"
+                Principal:
+                Service:
+                - "lambda.amazonaws.com"
+          Policies:
+            - PolicyName: "InlinePolicy"
+              PolicyDocument:
+                Version: "2012-10-17"
+                Statement:
+                  - Effect: "Allow"
+                    Action:
+                    - "s3:AbortMultipartUpload"
+                    - "s3:GetBucketLocation"
+                    - "s3:GetObject"
+                    - "s3:ListBucket"
+                    - "s3:ListBucketMultipartUploads"
+                    - "s3:PutObject"
+                    Resource: 
+                    - "arn:aws:s3:::%FIREHOSE_BUCKET_NAME%"
+                    - "arn:aws:s3:::%FIREHOSE_BUCKET_NAME%/*"
+                  - Effect: "Allow"
+                    Action:
+                    - "lambda:InvokeFunction"
+                    - "lambda:GetFunctionConfiguration"
+                    Resource: !Join [":", [ "arn:aws:lambda", !Ref "AWS::Region", !Ref "AWS::AccountId", "function:%FIREHOSE_DEFAULT_FUNCTION%:%FIREHOSE_DEFAULT_VERSION%" ]]
+                  - Effect: "Allow"
+                    Action:
+                    - "logs:CreateLogGroup"
+                    - "logs:CreateLogStream"
+                    - "logs:PutLogEvents"
+                    Resource: !Join [":", [ "arn:aws:logs", !Ref "AWS::Region", !Ref "AWS::AccountId", "log-group:*:log-stream:*" ]]
+
+  ProcessAnalyzedTweetStreamRole:
+      Type: "AWS::IAM::Role"
+      Properties:
+          Path: "/"
+          AssumeRolePolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Sid: "AllowLambdaServiceToAssumeRole"
+                Effect: "Allow"
+                Action:
+                  - "sts:AssumeRole"
+                Principal:
+                Service:
+                  - "lambda.amazonaws.com"
+          Policies:
+            - PolicyName: "ProcessAnalyzedTweetStreamRole"
+              PolicyDocument:
+                Version: "2012-10-17"
+                Statement:
+                  - Effect: "Allow"
+                    Action:
+                    - "s3:AbortMultipartUpload"
+                    - "s3:GetBucketLocation"
+                    - "s3:GetObject"
+                    - "s3:ListBucket"
+                    - "s3:ListBucketMultipartUploads"
+                    - "s3:PutObject"
+                    Resource: 
+                    - "arn:aws:s3:::%FIREHOSE_BUCKET_NAME%"
+                    - "arn:aws:s3:::%FIREHOSE_BUCKET_NAME%/*"
+                  - Effect: "Allow"
+                    Action:
+                    - "lambda:InvokeFunction"
+                    - "lambda:GetFunctionConfiguration"
+                    Resource: !Join [":", [ "arn:aws:lambda", !Ref "AWS::Region", !Ref "AWS::AccountId", "function:%FIREHOSE_DEFAULT_FUNCTION%:%FIREHOSE_DEFAULT_VERSION%" ]]
+                  - Effect: "Allow"
+                    Action:
+                    - "logs:CreateLogGroup"
+                    - "logs:CreateLogStream"
+                    - "logs:PutLogEvents"
+                    Resource: !Join [":", [ "arn:aws:logs", !Ref "AWS::Region", !Ref "AWS::AccountId", "log-group:*:log-stream:*" ]]   
+
+  LambdaFunctionIAMRole:
+      Type: "AWS::IAM::Role"
+      Properties:
+          Path: "/"
+          AssumeRolePolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              -
+                Sid: "AllowLambdaServiceToAssumeRole"
+                Effect: "Allow"
+                Action:
+                  - "sts:AssumeRole"
+                Principal:
+                  Service:
+                    - "lambda.amazonaws.com"
+          Policies:
+            -
+              PolicyName: "InlinePolicy"
+              PolicyDocument:
+                Version: "2012-10-17"
+                Statement:
+                  -
+                    Effect: "Allow"
+                    Action:
+                      - "logs:CreateLogGroup"
+                      - "logs:CreateLogStream"
+                      - "logs:PutLogEvents"
+                    Resource: "arn:aws:logs:*:*:*"
+                  -
+                    Effect: "Allow"
+                    Action:
+                      - "ec2:*"
+                      - "iam:*"
+                      - "cloudformation:*"
+                      - "logs:*"
+                    Resource: "*"
+
   RawTweetStream:
     Type: AWS::Kinesis::Stream
     Properties:
@@ -89,128 +210,6 @@ Resources:
     Type: "AWS::Logs::LogStream"
     Properties:
       LogGroupName: !Ref FirehoseLoggingLogGroup
-      
-  ProcessRawTweetStreamRole:
-      Type: "AWS::IAM::Role"
-      Properties:
-          Path: "/"
-          AssumeRolePolicyDocument:
-            Version: "2012-10-17"
-            Statement:
-            - Sid: "AllowLambdaServiceToAssumeRole"
-              Effect: "Allow"
-              Action:
-              - "sts:AssumeRole"
-              Principal:
-                Service:
-                - "lambda.amazonaws.com"
-          Policies:
-            - PolicyName: "InlinePolicy"
-              PolicyDocument:
-                Version: "2012-10-17"
-                Statement:
-                  - Effect: "Allow"
-                    Action:
-                    - "s3:AbortMultipartUpload"
-                    - "s3:GetBucketLocation"
-                    - "s3:GetObject"
-                    - "s3:ListBucket"
-                    - "s3:ListBucketMultipartUploads"
-                    - "s3:PutObject"
-                    Resource: 
-                    - "arn:aws:s3:::%FIREHOSE_BUCKET_NAME%"
-                    - "arn:aws:s3:::%FIREHOSE_BUCKET_NAME%/*"
-                  - Effect: "Allow"
-                    Action:
-                    - "lambda:InvokeFunction"
-                    - "lambda:GetFunctionConfiguration"
-                    Resource: "arn:aws:lambda::AWS::REGION::AWS::ACCOUNT_ID:function:%FIREHOSE_DEFAULT_FUNCTION%:%FIREHOSE_DEFAULT_VERSION%"
-                  - Effect: "Allow"
-                    Action:
-                    - "logs:CreateLogGroup"
-                    - "logs:CreateLogStream"
-                    - "logs:PutLogEvents"
-                    Resource: "arn:aws:logs:AWS::REGION:AWS::ACCOUNT_ID:log-group:*:log-stream:*"
-
-  ProcessAnalyzedTweetStreamRole:
-      Type: "AWS::IAM::Role"
-      Properties:
-          Path: "/"
-          AssumeRolePolicyDocument:
-            Version: "2012-10-17"
-            Statement:
-            - Sid: "AllowLambdaServiceToAssumeRole"
-              Effect: "Allow"
-              Action:
-              - "sts:AssumeRole"
-              Principal:
-                Service:
-                - "lambda.amazonaws.com"
-          Policies:
-            - PolicyName: "InlinePolicy"
-              PolicyDocument:
-                Version: "2012-10-17"
-                Statement:
-                  - Effect: "Allow"
-                    Action:
-                    - "s3:AbortMultipartUpload"
-                    - "s3:GetBucketLocation"
-                    - "s3:GetObject"
-                    - "s3:ListBucket"
-                    - "s3:ListBucketMultipartUploads"
-                    - "s3:PutObject"
-                    Resource: 
-                    - "arn:aws:s3:::%FIREHOSE_BUCKET_NAME%"
-                    - "arn:aws:s3:::%FIREHOSE_BUCKET_NAME%/*"
-                  - Effect: "Allow"
-                    Action:
-                    - "lambda:InvokeFunction"
-                    - "lambda:GetFunctionConfiguration"
-                    Resource: "arn:aws:lambda:AWS::REGION::AWS::ACCOUNT_ID:function:%FIREHOSE_DEFAULT_FUNCTION%:%FIREHOSE_DEFAULT_VERSION%"
-                  - Effect: "Allow"
-                    Action:
-                    - "logs:CreateLogGroup"
-                    - "logs:CreateLogStream"
-                    - "logs:PutLogEvents"
-                    Resource: "arn:aws:logs:AWS::REGION:AWS::ACCOUNT_ID:log-group:*:log-stream:*"   
-
-  LambdaFunctionIAMRole:
-      Type: "AWS::IAM::Role"
-      Properties:
-          Path: "/"
-          AssumeRolePolicyDocument:
-            Version: "2012-10-17"
-            Statement:
-              -
-                Sid: "AllowLambdaServiceToAssumeRole"
-                Effect: "Allow"
-                Action:
-                  - "sts:AssumeRole"
-                Principal:
-                  Service:
-                    - "lambda.amazonaws.com"
-          Policies:
-            -
-              PolicyName: "InlinePolicy"
-              PolicyDocument:
-                Version: "2012-10-17"
-                Statement:
-                  -
-                    Effect: "Allow"
-                    Action:
-                      - "logs:CreateLogGroup"
-                      - "logs:CreateLogStream"
-                      - "logs:PutLogEvents"
-                    Resource: "arn:aws:logs:*:*:*"
-                  -
-                    Effect: "Allow"
-                    Action:
-                      - "ec2:*"
-                      - "iam:*"
-                      - "cloudformation:*"
-                      - "logs:*"
-                    Resource: "*"
-
   CompareFacesWithOwn:
     Type: AWS::Serverless::Function
     Properties:
