@@ -132,22 +132,28 @@ Resources:
                   -
                     Effect: "Allow"
                     Action:
-                      - "kinesis:ListStreams"
-                    Resource: "arn:aws:kinesis:*:*:streams/*"
+                      - "s3:AbortMultipartUpload"
+                      - "s3:GetBucketLocation"
+                      - "s3:GetObject"
+                      - "s3:ListBucket"
+                      - "s3:ListBucketMultipartUploads"
+                      - "s3:PutObject"
+                    Resource: 
+                      - "arn:aws:s3:::%FIREHOSE_BUCKET_NAME%"
+                      - "arn:aws:s3:::%FIREHOSE_BUCKET_NAME%/*"
                   -
                     Effect: "Allow"
                     Action:
-                      - "kinesis:DescribeStream"
-                      - "kinesis:GetRecords"
-                      - "kinesis:GetShardIterator"
-                    Resource: !GetAtt RawTweetStream.Arn
+                      -  "lambda:InvokeFunction"
+                      - "lambda:GetFunctionConfiguration"
+                    Resource: "arn:aws:lambda::AWS::REGION::AWS::ACCOUNT_ID:function:%FIREHOSE_DEFAULT_FUNCTION%:%FIREHOSE_DEFAULT_VERSION%"
                   -
                     Effect: "Allow"
                     Action:
                       - "logs:CreateLogGroup"
                       - "logs:CreateLogStream"
                       - "logs:PutLogEvents"
-                    Resource: "arn:aws:logs:*:*:*"     
+                    Resource: !GetAtt FirehoseLogStream.Arn
 
   ProcessAnalyzedTweetStreamRole:
       Type: "AWS::IAM::Role"
@@ -173,22 +179,28 @@ Resources:
                   -
                     Effect: "Allow"
                     Action:
-                      - "kinesis:ListStreams"
-                    Resource: "arn:aws:kinesis:*:*:streams/*"
+                      - "s3:AbortMultipartUpload"
+                      - "s3:GetBucketLocation"
+                      - "s3:GetObject"
+                      - "s3:ListBucket"
+                      - "s3:ListBucketMultipartUploads"
+                      - "s3:PutObject"
+                    Resource: 
+                      - "arn:aws:s3:::%FIREHOSE_BUCKET_NAME%"
+                      - "arn:aws:s3:::%FIREHOSE_BUCKET_NAME%/*"
                   -
                     Effect: "Allow"
                     Action:
-                      - "kinesis:DescribeStream"
-                      - "kinesis:GetRecords"
-                      - "kinesis:GetShardIterator"
-                    Resource: !GetAtt RawTweetStream.Arn
+                      -  "lambda:InvokeFunction"
+                      - "lambda:GetFunctionConfiguration"
+                    Resource: "arn:aws:lambda:AWS::REGION::AWS::ACCOUNT_ID:function:%FIREHOSE_DEFAULT_FUNCTION%:%FIREHOSE_DEFAULT_VERSION%"
                   -
                     Effect: "Allow"
                     Action:
                       - "logs:CreateLogGroup"
                       - "logs:CreateLogStream"
                       - "logs:PutLogEvents"
-                    Resource: "arn:aws:logs:*:*:*"         
+                    Resource: !GetAtt FirehoseLogStream.Arn         
 
   LambdaFunctionIAMRole:
       Type: "AWS::IAM::Role"
