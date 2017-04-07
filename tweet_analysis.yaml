@@ -97,44 +97,39 @@ Resources:
           AssumeRolePolicyDocument:
             Version: "2012-10-17"
             Statement:
-              -
-                Sid: "AllowLambdaServiceToAssumeRole"
-                Effect: "Allow"
-                Action:
-                  - "sts:AssumeRole"
-                Principal:
-                  Service:
-                    - "lambda.amazonaws.com"
+            - Sid: "AllowLambdaServiceToAssumeRole"
+              Effect: "Allow"
+              Action:
+              - "sts:AssumeRole"
+              Principal:
+                Service:
+                - "lambda.amazonaws.com"
           Policies:
-            -
-              PolicyName: "InlinePolicy"
+            - PolicyName: "InlinePolicy"
               PolicyDocument:
                 Version: "2012-10-17"
                 Statement:
-                  -
-                    Effect: "Allow"
+                  - Effect: "Allow"
                     Action:
-                      - "s3:AbortMultipartUpload"
-                      - "s3:GetBucketLocation"
-                      - "s3:GetObject"
-                      - "s3:ListBucket"
-                      - "s3:ListBucketMultipartUploads"
-                      - "s3:PutObject"
+                    - "s3:AbortMultipartUpload"
+                    - "s3:GetBucketLocation"
+                    - "s3:GetObject"
+                    - "s3:ListBucket"
+                    - "s3:ListBucketMultipartUploads"
+                    - "s3:PutObject"
                     Resource: 
-                      - "arn:aws:s3:::%FIREHOSE_BUCKET_NAME%"
-                      - "arn:aws:s3:::%FIREHOSE_BUCKET_NAME%/*"
-                  -
-                    Effect: "Allow"
+                    - "arn:aws:s3:::%FIREHOSE_BUCKET_NAME%"
+                    - "arn:aws:s3:::%FIREHOSE_BUCKET_NAME%/*"
+                  - Effect: "Allow"
                     Action:
-                      -  "lambda:InvokeFunction"
-                      - "lambda:GetFunctionConfiguration"
+                    -  "lambda:InvokeFunction"
+                    - "lambda:GetFunctionConfiguration"
                     Resource: "arn:aws:lambda::AWS::REGION::AWS::ACCOUNT_ID:function:%FIREHOSE_DEFAULT_FUNCTION%:%FIREHOSE_DEFAULT_VERSION%"
-                  -
-                    Effect: "Allow"
+                  - Effect: "Allow"
                     Action:
-                      - "logs:CreateLogGroup"
-                      - "logs:CreateLogStream"
-                      - "logs:PutLogEvents"
+                    - "logs:CreateLogGroup"
+                    - "logs:CreateLogStream"
+                    - "logs:PutLogEvents"
                     Resource: "arn:aws:logs:AWS::REGION:AWS::ACCOUNT_ID:log-group:*:log-stream:*"
 
   ProcessAnalyzedTweetStreamRole:
@@ -144,44 +139,39 @@ Resources:
           AssumeRolePolicyDocument:
             Version: "2012-10-17"
             Statement:
-              -
-                Sid: "AllowLambdaServiceToAssumeRole"
-                Effect: "Allow"
-                Action:
-                  - "sts:AssumeRole"
-                Principal:
-                  Service:
-                    - "lambda.amazonaws.com"
+            - Sid: "AllowLambdaServiceToAssumeRole"
+              Effect: "Allow"
+              Action:
+              - "sts:AssumeRole"
+              Principal:
+                Service:
+                - "lambda.amazonaws.com"
           Policies:
-            -
-              PolicyName: "InlinePolicy"
+            - PolicyName: "InlinePolicy"
               PolicyDocument:
                 Version: "2012-10-17"
                 Statement:
-                  -
-                    Effect: "Allow"
+                  - Effect: "Allow"
                     Action:
-                      - "s3:AbortMultipartUpload"
-                      - "s3:GetBucketLocation"
-                      - "s3:GetObject"
-                      - "s3:ListBucket"
-                      - "s3:ListBucketMultipartUploads"
-                      - "s3:PutObject"
+                    - "s3:AbortMultipartUpload"
+                    - "s3:GetBucketLocation"
+                    - "s3:GetObject"
+                    - "s3:ListBucket"
+                    - "s3:ListBucketMultipartUploads"
+                    - "s3:PutObject"
                     Resource: 
-                      - "arn:aws:s3:::%FIREHOSE_BUCKET_NAME%"
-                      - "arn:aws:s3:::%FIREHOSE_BUCKET_NAME%/*"
-                  -
-                    Effect: "Allow"
+                    - "arn:aws:s3:::%FIREHOSE_BUCKET_NAME%"
+                    - "arn:aws:s3:::%FIREHOSE_BUCKET_NAME%/*"
+                  - Effect: "Allow"
                     Action:
-                      -  "lambda:InvokeFunction"
-                      - "lambda:GetFunctionConfiguration"
+                    -  "lambda:InvokeFunction"
+                    - "lambda:GetFunctionConfiguration"
                     Resource: "arn:aws:lambda:AWS::REGION::AWS::ACCOUNT_ID:function:%FIREHOSE_DEFAULT_FUNCTION%:%FIREHOSE_DEFAULT_VERSION%"
-                  -
-                    Effect: "Allow"
+                  - Effect: "Allow"
                     Action:
-                      - "logs:CreateLogGroup"
-                      - "logs:CreateLogStream"
-                      - "logs:PutLogEvents"
+                    - "logs:CreateLogGroup"
+                    - "logs:CreateLogStream"
+                    - "logs:PutLogEvents"
                     Resource: "arn:aws:logs:AWS::REGION:AWS::ACCOUNT_ID:log-group:*:log-stream:*"   
 
   LambdaFunctionIAMRole:
