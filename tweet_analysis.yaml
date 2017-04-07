@@ -135,7 +135,7 @@ Resources:
                       - "logs:CreateLogGroup"
                       - "logs:CreateLogStream"
                       - "logs:PutLogEvents"
-                    Resource: "arn:aws:logs:AWS::REGION:AWS::ACCOUNT_ID:*"
+                    Resource: "arn:aws:logs:AWS::REGION:AWS::ACCOUNT_ID:log-group:*:log-stream:*"
 
   ProcessAnalyzedTweetStreamRole:
       Type: "AWS::IAM::Role"
@@ -182,7 +182,7 @@ Resources:
                       - "logs:CreateLogGroup"
                       - "logs:CreateLogStream"
                       - "logs:PutLogEvents"
-                    Resource: "arn:aws:logs:AWS::REGION:AWS::ACCOUNT_ID:*"       
+                    Resource: "arn:aws:logs:AWS::REGION:AWS::ACCOUNT_ID:log-group:*:log-stream:*"   
 
   LambdaFunctionIAMRole:
       Type: "AWS::IAM::Role"
