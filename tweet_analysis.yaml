@@ -140,7 +140,7 @@ Resources:
                       - "kinesis:DescribeStream"
                       - "kinesis:GetRecords"
                       - "kinesis:GetShardIterator"
-                    Resource: !GetAtt RawTweetKinesisFirehose.Arn
+                    Resource: !GetAtt RawTweetStream.Arn
                   -
                     Effect: "Allow"
                     Action:
