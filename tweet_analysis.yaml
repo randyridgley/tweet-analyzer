@@ -122,7 +122,7 @@ Resources:
                     - "arn:aws:s3:::%FIREHOSE_BUCKET_NAME%/*"
                   - Effect: "Allow"
                     Action:
-                    -  "lambda:InvokeFunction"
+                    - "lambda:InvokeFunction"
                     - "lambda:GetFunctionConfiguration"
                     Resource: "arn:aws:lambda::AWS::REGION::AWS::ACCOUNT_ID:function:%FIREHOSE_DEFAULT_FUNCTION%:%FIREHOSE_DEFAULT_VERSION%"
                   - Effect: "Allow"
@@ -164,7 +164,7 @@ Resources:
                     - "arn:aws:s3:::%FIREHOSE_BUCKET_NAME%/*"
                   - Effect: "Allow"
                     Action:
-                    -  "lambda:InvokeFunction"
+                    - "lambda:InvokeFunction"
                     - "lambda:GetFunctionConfiguration"
                     Resource: "arn:aws:lambda:AWS::REGION::AWS::ACCOUNT_ID:function:%FIREHOSE_DEFAULT_FUNCTION%:%FIREHOSE_DEFAULT_VERSION%"
                   - Effect: "Allow"
