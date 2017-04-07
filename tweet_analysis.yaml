@@ -29,7 +29,7 @@ Resources:
   TweetS3Bucket:
       Type: "AWS::S3::Bucket"
       Properties: 
-          BucketName: !Ref TweetBucketname
+          BucketName: !Ref TweetBucketName
 
   TweetS3BucketPolicy:
     Type: "AWS::S3::BucketPolicy"
@@ -49,10 +49,9 @@ Resources:
 
   RawTweetKinesisFirehose:
     Type: "AWS::KinesisFirehose::DeliveryStream"
-    DependsOn: TweetS3BucketPolicy
     Properties:
       S3DestinationConfiguration:
-        BucketARN: !Join [ "", [ "arn:aws:s3:::", !Ref TweetS3BucketPolicy ] ]
+        BucketARN: !Join [ "", [ "arn:aws:s3:::", !Ref TweetS3Bucket ] ]
         BufferingHints:
           IntervalInSeconds: 60 # amount of seconds to wait before persisting
           SizeInMBs: 1 # setting small for a basic test
@@ -69,7 +68,7 @@ Resources:
     DependsOn: TweetS3BucketPolicy
     Properties:
       S3DestinationConfiguration:
-        BucketARN: !Join [ "", [ "arn:aws:s3:::", !Ref TweetS3BucketPolicy ] ]
+        BucketARN: !Join [ "", [ "arn:aws:s3:::", !Ref TweetS3Bucket ] ]
         BufferingHints:
           IntervalInSeconds: 60 # amount of seconds to wait before persisting
           SizeInMBs: 1 # setting small for a basic test
@@ -281,7 +280,6 @@ Resources:
       Timeout: 60
   ProcessRawTweets:
     Type: AWS::Serverless::Function
-    DependsOn: RawTweetKinesisFirehose
     Properties:
       FunctionName: Process-Raw-Tweets
       Handler: index.handler
@@ -302,7 +300,6 @@ Resources:
             StartingPosition: TRIM_HORIZON
   PushToFirehose:
     Type: AWS::Serverless::Function
-    DependsOn: ProcessedTweetKinesisFirehose
     Properties:
       FunctionName: Push-To-Firehose
       Handler: index.handler
