@@ -281,6 +281,7 @@ Resources:
       Timeout: 60
   ProcessRawTweets:
     Type: AWS::Serverless::Function
+    DependsOn: RawTweetKinesisFirehose
     Properties:
       FunctionName: Process-Raw-Tweets
       Handler: index.handler
@@ -301,6 +302,7 @@ Resources:
             StartingPosition: TRIM_HORIZON
   PushToFirehose:
     Type: AWS::Serverless::Function
+    DependsOn: ProcessedTweetKinesisFirehose
     Properties:
       FunctionName: Push-To-Firehose
       Handler: index.handler
