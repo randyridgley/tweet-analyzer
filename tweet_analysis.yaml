@@ -295,7 +295,7 @@ Resources:
       Timeout: 60
       Environment:
         Variables: 
-          DELIVERY_STREAM_NAME: !GetAtt RawTweetKinesisFirehose.DeliveryStreamName
+          DELIVERY_STREAM_NAME: !Ref RawTweetKinesisFirehose
           AWS_DEFAULT_REGION: !Ref AWS::Region
       Events:
         Stream:
@@ -315,7 +315,7 @@ Resources:
       Timeout: 60
       Environment:
         Variables: 
-          DELIVERY_STREAM_NAME: !GetAtt ProcessedTweetKinesisFirehose.DeliveryStreamName
+          DELIVERY_STREAM_NAME: !Ref ProcessedTweetKinesisFirehose
           AWS_DEFAULT_REGION: !Ref AWS::Region
 
   StateMachineIAMRole:
