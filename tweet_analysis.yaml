@@ -229,7 +229,6 @@ Resources:
       Environment:
         Variables: 
           FACE_COMPARISION_S3_BUCKET: !Ref ComparisonImage
-          AWS_DEFAULT_REGION: !Ref AWS::Region
   DetectMediaFaces:
     Type: AWS::Serverless::Function
     Properties:
@@ -239,9 +238,6 @@ Resources:
       CodeUri: ./src/DetectMediaFaces
       Role: !GetAtt LambdaFunctionIAMRole.Arn
       Timeout: 60
-      Environment:
-        Variables: 
-          AWS_DEFAULT_REGION: !Ref AWS::Region
   DetectMediaLabels:
     Type: AWS::Serverless::Function
     Properties:
@@ -255,7 +251,6 @@ Resources:
         Variables: 
           MAX_LABELS: !Ref MaxLabelDetection
           MIN_CONFIDENCE: !Ref MinLabelConfidence
-          AWS_DEFAULT_REGION: !Ref AWS::Region
   GetTweetSentiment:
     Type: AWS::Serverless::Function
     Properties:
@@ -286,7 +281,6 @@ Resources:
       Environment:
         Variables: 
           DELIVERY_STREAM_NAME: !Ref RawTweetKinesisFirehose
-          AWS_DEFAULT_REGION: !Ref AWS::Region
       Events:
         Stream:
           Type: Kinesis
@@ -306,7 +300,6 @@ Resources:
       Environment:
         Variables: 
           DELIVERY_STREAM_NAME: !Ref ProcessedTweetKinesisFirehose
-          AWS_DEFAULT_REGION: !Ref AWS::Region
 
   StateMachineIAMRole:
       Type: "AWS::IAM::Role"
