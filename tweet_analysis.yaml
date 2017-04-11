@@ -95,6 +95,10 @@ Resources:
                     Action:
                       - "firehose:PutRecord"
                     Resource: !Join [":", [ "arn:aws:firehose", !Ref "AWS::Region", !Ref "AWS::AccountId", "deliverystream/*" ]]
+                  - Effect: "Allow"
+                    Action: 
+                      - "states:StartExecution"
+                    Resource: !Join [":", [ "arn:aws:states", !Ref "AWS::Region", !Ref "AWS::AccountId", "stateMachine:*" ]]
 
   ProcessAnalyzedTweetStreamRole:
       Type: "AWS::IAM::Role"
