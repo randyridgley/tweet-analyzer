@@ -14,6 +14,7 @@ Parameters:
   
   ComparisonFaceKey:
     Description: "S3 key of the image to use as a comparison"
+    Type: "String"
   
   SimilarityThreshold:
     Description: "Threshold of face match in Rekognotion comparison"
@@ -28,12 +29,12 @@ Parameters:
     Type: "Number"
   
   Email:
-    Description: Email for face matches in Rekognition
-    Type: String
+    Description: "Email for face matches in Rekognition"
+    Type: "String"
   
   SMS:
-    Description: SMS Number to alert for face matches in Rekognition
-    Type: String
+    Description: "SMS Number to alert for face matches in Rekognition"
+    Type: "String"
 
 Resources:
   ProcessRawTweetStreamRole:
