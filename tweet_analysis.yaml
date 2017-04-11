@@ -385,38 +385,23 @@ Resources:
                 {
                   "Variable": "$.num_of_regions",
                   "NumericGreaterThan": 0,
-                  "Next": "DetectFacesState"
+                  "Next": "GetMediaFaces"
                 }
               ],
               "Default": "PushToFirehose"
             },
-            "DetectFacesState": {
-              "Type": "Parallel",
-              "Branches": [
-                {
-                  "StartAt": "GetMediaFaces",
-                  "States": {
-                    "GetMediaFaces": {
-                          "Type": "Task",
-                          "Resource": "arn:aws:lambda:AWS::REGION:AWS::ACCOUNT_ID:function:Detect-Media-Faces",
-                          "InputPath": "$"
-                    }
-                  }
-                },
-                {
-                  "StartAt": "CompareFacesWithOwn",
-                  "States": {
-                    "CompareFacesWithOwn": {
-                      "Type": "Task",
-                      "Resource": "arn:aws:lambda:AWS::REGION:AWS::ACCOUNT_ID:function:Compare-Faces-With-Own",
-                      "InputPath": "$",
-                      "End": "True"
-                    }
-                  }
-                }
-              ],
-              "Next": "PushToFirehose"
+            "GetMediaFaces": {
+                "Type": "Task",
+                "Resource": "arn:aws:lambda:AWS::REGION:AWS::ACCOUNT_ID:function:Detect-Media-Faces",
+                "InputPath": "$",
+                "Next": "CompareFacesWithOwn"
             },
+            "CompareFacesWithOwn": {
+              "Type": "Task",
+              "Resource": "arn:aws:lambda:AWS::REGION:AWS::ACCOUNT_ID:function:Compare-Faces-With-Own",
+              "InputPath": "$",
+              "Next": "PushToFirehose"
+            },            
             "PushToFirehose": {
               "Type" : "Task",
               "Resource": "arn:aws:lambda:AWS::REGION:AWS::ACCOUNT_ID:function:Push-To-Firehose",
