@@ -94,7 +94,7 @@ Resources:
                   - Effect: "Allow"
                     Action:
                       - "firehose:PutRecord"
-                    Resource: !Ref RawTweetKinesisFirehose
+                    Resource: !Join [":", [ "arn:aws:lambda", !Ref "AWS::Region", !Ref "AWS::AccountId", "function:%FIREHOSE_DEFAULT_FUNCTION%:%FIREHOSE_DEFAULT_VERSION%" ]]
 
   ProcessAnalyzedTweetStreamRole:
       Type: "AWS::IAM::Role"
