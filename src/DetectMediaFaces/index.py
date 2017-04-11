@@ -22,8 +22,10 @@ def detect_faces(image, attributes=['ALL']):
 
 def handler(event, context):
     people = {}
+    people_count = 0
     for label in event['labels']:
         if "Person" in label.values():
+            people_count++
             image_data = BytesIO(urlopen(label['media_url_https']).read())
             print "{Name} - {Confidence}%".format(**label)
             person = {}
@@ -45,5 +47,6 @@ def handler(event, context):
                     person['emotions'] = emotions
                 people.append(person)
     event['people'] = people
+    event['people_count'] = people_count
     return json.dumps(event)
 
