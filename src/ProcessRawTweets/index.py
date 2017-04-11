@@ -28,11 +28,11 @@ def handler(event, context):
         print("Decoded payload: " + payload)
         tweet = json.loads(payload)
         data = {}
-        data['text'] = tweet['text'])
-        data['screen_name'] = tweet['user']['screen_name'])
-        data['id'] = tweet['id'])
+        data['text'] = tweet['text']
+        data['screen_name'] = tweet['user']['screen_name']
+        data['id'] = tweet['id']
         data['place'] = tweet['place']
-        data['verified'] = tweet['user']['verified'])
+        data['verified'] = tweet['user']['verified']
 
         if tweet['entities'].has_key('hashtags'):
             data['hashtags'] = tweet['entities']['hashtags']
