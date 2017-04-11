@@ -91,6 +91,10 @@ Resources:
                       - "logs:CreateLogStream"
                       - "logs:PutLogEvents"
                     Resource: !Join [":", [ "arn:aws:logs", !Ref "AWS::Region", !Ref "AWS::AccountId", "log-group:*:log-stream:*" ]]
+                  - Effect: "Allow"
+                    Action:
+                      - "firehose:PutRecord"
+                    Resource: !Ref RawTweetKinesisFirehose
 
   ProcessAnalyzedTweetStreamRole:
       Type: "AWS::IAM::Role"
