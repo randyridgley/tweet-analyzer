@@ -318,7 +318,7 @@ Resources:
       Environment:
         Variables: 
           DELIVERY_STREAM_NAME: !Ref RawTweetKinesisFirehose
-          STATE_MACHINE_ARN: !GetAtt TweetAnalysisStateMachine.Arn
+          STATE_MACHINE_ARN: !Ref TweetAnalysisStateMachine
       Events:
         Stream:
           Type: Kinesis
