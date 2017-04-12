@@ -379,12 +379,12 @@ Resources:
           "States": {
             "GetTweetSentiment": {
               "Type": "Task",
-              "Resource": "arn:aws:lambda:${AWS::REGION}:${AWS::ACCOUNT_ID}:function:Get-Tweet-Sentiment",
+              "Resource": "${GetTweetSentiment.Arn}",
               "Next": "GetMediaLabels"
             },
             "GetMediaLabels": {
               "Type": "Task",
-              "Resource": "arn:aws:lambda:${AWS::REGION}:${AWS::ACCOUNT_ID}:function:Detect-Media-Labels",
+              "Resource": "${DetectMediaLabels.Arn}",
               "InputPath": "$",
               "Next": "HasPeopleChoiceState"
             },
@@ -401,19 +401,19 @@ Resources:
             },
             "GetMediaFaces": {
                 "Type": "Task",
-                "Resource": "arn:aws:lambda:${AWS::REGION}:${AWS::ACCOUNT_ID}:function:Detect-Media-Faces",
+                "Resource": "${DetectMediaFaces.Arn}",
                 "InputPath": "$",
                 "Next": "CompareFacesWithOwn"
             },
             "CompareFacesWithOwn": {
               "Type": "Task",
-              "Resource": "arn:aws:lambda:${AWS::REGION}:${AWS::ACCOUNT_ID}:function:Compare-Faces-With-Own",
+              "Resource": "${CompareFacesWithOwn.Arn}",
               "InputPath": "$",
               "Next": "PushToFirehose"
             },            
             "PushToFirehose": {
               "Type" : "Task",
-              "Resource": "arn:aws:lambda:${AWS::REGION}:${AWS::ACCOUNT_ID}:function:Push-To-Firehose",
+              "Resource": "${PushToFirehose.Arn}",
               "End": true
             }
           }
