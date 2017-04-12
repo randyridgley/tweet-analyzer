@@ -29,7 +29,7 @@ def handler(event, context):
     for media in event['entities']['media']:
         image_data = BytesIO(urlopen(media['media_url_https']).read())
 
-        labels = []
+        labels = {}
         for label in detect_labels(image_data.getvalue(), labels, confidence):
             label['media_url_https'] = media['media_url_https']
             labels.append(label)
