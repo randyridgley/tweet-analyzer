@@ -13,12 +13,12 @@ def handler(event, context):
     sid = SentimentIntensityAnalyzer()
     text = event['text']
     sentiment_value = sid.polarity_scores(text)['compound']
-    print sentiment_value
+    print('sentiment value: ' + sentiment_value)
     if float(sentiment_value) < 0.0:
         sentiment = "neg"
     elif float(sentiment_value) >= 0.0:
         sentiment = "pos"
-    print text, sentiment, sentiment_value
+    print(text + ","  + sentiment + "," + sentiment_value)
     event['sentiment'] = sentiment
     event['sentimentValue'] = sentiment_value
 
