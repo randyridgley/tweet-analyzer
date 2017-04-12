@@ -31,7 +31,6 @@ def handler(event, context):
 
         labels = []
         for label in detect_labels(image_data.getvalue(), labels, confidence):
-            print "{Name} - {Confidence}%".format(**label)
             label['media_url_https'] = media['media_url_https']
             labels.append(label)
 
