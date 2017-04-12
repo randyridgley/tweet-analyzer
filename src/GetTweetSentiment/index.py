@@ -4,6 +4,7 @@ import base64
 import json
 import boto3
 import os
+import requests
 
 from vaderSentiment.vaderSentiment import SentimentIntensityAnalyzer
 
