@@ -2,9 +2,6 @@ from __future__ import print_function
 
 import base64
 import json
-import boto3
-import os
-import requests
 
 from vaderSentiment.vaderSentiment import SentimentIntensityAnalyzer
 
