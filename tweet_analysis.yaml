@@ -372,7 +372,7 @@ Resources:
   TweetAnalysisStateMachine:
     Type: AWS::StepFunctions::StateMachine
     Properties:
-      DefinitionString: |-
+      DefinitionString: !Sub |-
        {
           "Comment": "Analyze the tweet text sentiment and the sentiment of any media associated with the tweet",
           "StartAt": "GetTweetSentiment",
