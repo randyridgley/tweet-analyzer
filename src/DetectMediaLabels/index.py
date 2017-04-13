@@ -11,35 +11,36 @@ print('Loading function')
 
 # get the region name from the environment variable 'AWS_DEFAULT_REGION'
 region = os.environ['AWS_DEFAULT_REGION']
-labels = os.environ['MAX_LABELS']
-confidence = os.environ['MIN_CONFIDENCE']
-
+labels = int(os.environ['MAX_LABELS'])
+print('Max Labels=', labels)
+confidence = int(os.environ['MIN_CONFIDENCE'])
+print('Confidence=', confidence)
 print('Working in region: ', region)
 rekognition = boto3.client("rekognition", region)
     
-def detect_labels(image, max_labels=10, min_confidence=95):
+def detect_labels(image):
     response = rekognition.detect_labels(
 		Image={'Bytes': image},
-		MaxLabels=max_labels,
-		MinConfidence=min_confidence,
+		MaxLabels=labels,
+		MinConfidence=confidence,
 	)
     return response['Labels']
 
 def handler(event, context):
-    if 'entities' in event and 'media' in event['entities']:
-        labels = {}
-        for media in event['entities']['media']:
+    if 'media' in event:
+        labels = []
+        for media in event['media']:
             if media['type'] == 'photo':
                 image_data = BytesIO(urlopen(media['media_url_https']).read())
 
-                for label in detect_labels(image_data.getvalue(), labels, confidence):
+                for label in detect_labels(image_data.getvalue()):
                     if "Person" in label.values() or "People" in label.values():
                         event['hasPerson'] = True
 
                     label['media_url_https'] = media['media_url_https']
                     print(label)
                     labels.append(label)
-
-        event['labels'] = labels
-    return event
+        event['image_analysis'] = {}
+        event['image_analysis']['labels'] = labels
+    return json.dumps(event)
 

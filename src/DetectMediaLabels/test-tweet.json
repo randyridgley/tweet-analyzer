@@ -1,0 +1,99 @@
+{
+    "lang": "en",
+    "verified": false,
+    "screen_name": "Queen_Minajesty",
+    "text": "I love my husband @OBJ_3 he so active https://t.co/o9ZWXeIli4",
+    "hashtags": [
+        {
+            "indices": [
+                0,
+                10
+            ],
+            "text": "Throwback"
+        },
+        {
+            "indices": [
+                13,
+                28
+            ],
+            "text": "OdellBeckhamJr"
+        }
+    ],
+    "timestamp_ms": "1491886252349",
+    "text_analysis": {
+        "sentimentValue": 0.8267,
+        "sentiment": "pos"
+    },
+    "place": {
+        "country_code": "US",
+        "url": "https://api.twitter.com/1.1/geo/id/5c2b5e46ab891f07.json",
+        "country": "United States",
+        "place_type": "city",
+        "bounding_box": {
+            "type": "Polygon",
+            "coordinates": [
+                [
+                    [
+                        -115.384091,
+                        36.129459
+                    ],
+                    [
+                        -115.384091,
+                        36.336371
+                    ],
+                    [
+                        -115.062159,
+                        36.336371
+                    ],
+                    [
+                        -115.062159,
+                        36.129459
+                    ]
+                ]
+            ]
+        },
+        "full_name": "Las Vegas, NV",
+        "attributes": {},
+        "id": "5c2b5e46ab891f07",
+        "name": "Las Vegas"
+    },
+    "media": [
+        {
+            "expanded_url": "https://twitter.com/thacelebritea/status/851651065640620032/video/1",
+            "sizes": {
+                "large": {
+                    "h": 480,
+                    "w": 480,
+                    "resize": "fit"
+                },
+                "small": {
+                    "h": 340,
+                    "w": 340,
+                    "resize": "fit"
+                },
+                "medium": {
+                    "h": 480,
+                    "w": 480,
+                    "resize": "fit"
+                },
+                "thumb": {
+                    "h": 150,
+                    "w": 150,
+                    "resize": "crop"
+                }
+            },
+            "url": "https://t.co/EhIR3C0Lsn",
+            "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/851650753928327168/pu/img/2ZXh7H5uqiUkPnal.jpg",
+            "id_str": "851650753928327168",
+            "indices": [
+                29,
+                52
+            ],
+            "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/851650753928327168/pu/img/2ZXh7H5uqiUkPnal.jpg",
+            "type": "photo",
+            "id": 851650753928327200,
+            "display_url": "pic.twitter.com/EhIR3C0Lsn"
+        }
+    ],
+    "id": 851658786230030300
+}

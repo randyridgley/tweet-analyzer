@@ -1,28 +1,25 @@
 from __future__ import print_function
 
+from io import BytesIO
+from urllib2 import urlopen
+
 import base64
 import json
 import boto3
-import botocore.session
-import botocore.exceptions
 import os
-
-
-# get the Delivery Stream name from the ENV Variables
-DELIVERY_STREAM_NAME = os.environ['DELIVERY_STREAM_NAME']
-print('Delivery Stream name is ', DELIVERY_STREAM_NAME)
 
 COMPARE_FACE_BUCKET = os.environ['COMPARE_FACE_BUCKET']
 COMPARE_FACE_KEY = os.environ['COMPARE_FACE_KEY']
-SIMILARITY_THRESHOLD = os.environ['SIMILARITY_THRESHOLD']
+SIMILARITY_THRESHOLD = int(os.environ['SIMILARITY_THRESHOLD'])
 MATCH_TOPIC_ARN = os.environ['MATCH_TOPIC_ARN']
+region = os.environ['AWS_DEFAULT_REGION']
 
 print('Working in region: ', region)
 rekognition = boto3.client("rekognition", region)
 sns = boto3.client('sns')
 
 def handler(event, context):
-    for label in event['labels']:
+    for label in event['image_analysis']['labels']:
         if "Person" in label.values():
             image_data = BytesIO(urlopen(label['media_url_https']).read())
 
@@ -33,10 +30,12 @@ def handler(event, context):
                         'Name': COMPARE_FACE_KEY
                     }
                 },
-                Bytes=image_data.getvalue(),
+                TargetImage={
+                    'Bytes' : image_data.getvalue()
+                },
                 SimilarityThreshold=SIMILARITY_THRESHOLD
             )
-
+            print('Match response ', json.dumps(response))
             if len(response['FaceMatches'])!=0:
                 msg = "Found a match at %s" % label['media_url_https']
                 response = client.publish(

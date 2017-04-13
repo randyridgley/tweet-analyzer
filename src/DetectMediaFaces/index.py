@@ -21,21 +21,21 @@ def detect_faces(image, attributes=['ALL']):
 	return response['FaceDetails']
 
 def handler(event, context):
-    people = {}
+    people = []
     people_count = 0
 
-    if 'labels' in event:
-        for label in event['labels']:
+    if 'labels' in event['image_analysis']:
+        for label in event['image_analysis']['labels']:
             if "Person" in label.values():
-                people_count++
+                people_count +=1
                 image_data = BytesIO(urlopen(label['media_url_https']).read())
-                print "{Name} - {Confidence}%".format(**label)
                 person = {}
                 for face in detect_faces(image_data.getvalue()):
-                    print "Face ({Confidence}%)".format(**face)
                     #store details
+                    print(json.dumps(face))
+                    person['BoundingBox'] = face['BoundingBox']
                     if 'Smile' in face:
-                        person['Smile'] = face['Smile']['Value']
+                        person['Smile'] = face['Smile']['Confidence']
                     if 'Gender' in face:
                         person['Gender'] = face['Gender']['Value']
                     if 'AgeRange' in face:
@@ -48,7 +48,7 @@ def handler(event, context):
                         
                         person['emotions'] = emotions
                     people.append(person)
-        event['people'] = people
-        event['people_count'] = people_count
+        event['image_analysis']['people'] = people
+        event['image_analysis']['people_count'] = people_count
     return json.dumps(event)
 

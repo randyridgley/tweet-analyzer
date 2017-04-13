@@ -17,7 +17,8 @@ def handler(event, context):
         sentiment = "neg"
     elif float(sentiment_value) >= 0.0:
         sentiment = "pos"
-    event['sentiment'] = sentiment
-    event['sentimentValue'] = sentiment_value    
-    return event
+    event['text_analysis'] = {}
+    event['text_analysis']['sentiment'] = sentiment
+    event['text_analysis']['sentimentValue'] = sentiment_value    
+    return json.dumps(event)
 
