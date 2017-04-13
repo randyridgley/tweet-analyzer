@@ -39,9 +39,20 @@ def handler(event, context):
             
         data['timestamp_ms'] = tweet['timestamp_ms']
         data['lang'] = tweet['lang']
+        
+        images = []
+        if 'entities' in tweet and 'media' in tweet['entities']:
+            for media in  tweet['entities']['media']:
+                image = {}
+                image['media_url_https'] = media['media_url_https']
+                image['id'] = media['id']
+                image['type'] = media['type']
+                image['url'] = media['url']
+                images.append(image)
 
-        if tweet['entities'].has_key('media'):
-            data['media'] = tweet['entities']['media']
+        data['media'] = images
+        
+        if images.count > 0:
             sf_payload = json.dumps(data)
             sf.start_execution(
                 stateMachineArn=os.environ['STATE_MACHINE_ARN'],
