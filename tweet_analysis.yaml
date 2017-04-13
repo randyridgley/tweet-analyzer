@@ -68,8 +68,8 @@ Resources:
                       - "s3:ListBucketMultipartUploads"
                       - "s3:PutObject"
                     Resource: 
-                      - "arn:aws:s3:::%FIREHOSE_BUCKET_NAME%"
-                      - "arn:aws:s3:::%FIREHOSE_BUCKET_NAME%/*"
+                      - !Join [ "", [ "arn:aws:s3:::", !Ref TweetS3Bucket ] ]
+                      - !Join [ "", [ "arn:aws:s3:::", !Ref TweetS3Bucket, "/raw/*" ] ]
                   -
                     Effect: "Allow"
                     Action: 
@@ -130,8 +130,8 @@ Resources:
                       - "s3:ListBucketMultipartUploads"
                       - "s3:PutObject"
                     Resource: 
-                      - "arn:aws:s3:::%FIREHOSE_BUCKET_NAME%"
-                      - "arn:aws:s3:::%FIREHOSE_BUCKET_NAME%/*"
+                      - !Join [ "", [ "arn:aws:s3:::", !Ref TweetS3Bucket ] ]
+                      - !Join [ "", [ "arn:aws:s3:::", !Ref TweetS3Bucket, "/processed/*" ] ]
                   - 
                     Effect: "Allow"
                     Action:
