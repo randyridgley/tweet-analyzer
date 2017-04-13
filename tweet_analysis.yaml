@@ -393,7 +393,7 @@ Resources:
               "Choices": [
                 {
                   "Variable": "$.hasPerson",
-                  "BooleanEquals": "True",
+                  "BooleanEquals": true,
                   "Next": "GetMediaFaces"
                 }
               ],
