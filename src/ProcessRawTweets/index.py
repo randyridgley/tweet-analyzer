@@ -39,7 +39,7 @@ def handler(event, context):
             
         data['timestamp_ms'] = tweet['timestamp_ms']
         data['lang'] = tweet['lang']
-        
+
         images = []
         if 'entities' in tweet and 'media' in tweet['entities']:
             for media in  tweet['entities']['media']:
@@ -64,5 +64,5 @@ def handler(event, context):
             Record={
                 'Data': payload
             })
-    return json.dumps(data)
+    return data
 

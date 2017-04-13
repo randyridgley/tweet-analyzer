@@ -50,5 +50,5 @@ def handler(event, context):
                     people.append(person)
         event['image_analysis']['people'] = people
         event['image_analysis']['people_count'] = people_count
-    return json.dumps(event)
+    return event
 

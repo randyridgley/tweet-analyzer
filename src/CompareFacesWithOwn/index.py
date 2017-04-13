@@ -45,5 +45,5 @@ def handler(event, context):
                     MessageStructure='string',
                 )
     
-    return json.dumps(event)
+    return event
 

@@ -20,5 +20,5 @@ def handler(event, context):
     event['text_analysis'] = {}
     event['text_analysis']['sentiment'] = sentiment
     event['text_analysis']['sentimentValue'] = sentiment_value    
-    return json.dumps(event)
+    return event
 

@@ -42,5 +42,5 @@ def handler(event, context):
                     labels.append(label)
         event['image_analysis'] = {}
         event['image_analysis']['labels'] = labels
-    return json.dumps(event)
+    return event
 
