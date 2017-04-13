@@ -26,15 +26,16 @@ def detect_labels(image, max_labels=10, min_confidence=95):
     return response['Labels']
 
 def handler(event, context):
-    if event['entities']['media']:
+    if 'media' in tweet['entities']:
+        labels = {}
         for media in event['entities']['media']:
-            image_data = BytesIO(urlopen(media['media_url_https']).read())
+            if media['type'] == 'photo':
+                image_data = BytesIO(urlopen(media['media_url_https']).read())
 
-            labels = {}
-            for label in detect_labels(image_data.getvalue(), labels, confidence):
-                label['media_url_https'] = media['media_url_https']
-                labels.append(label)
+                for label in detect_labels(image_data.getvalue(), labels, confidence):
+                    label['media_url_https'] = media['media_url_https']
+                    labels.append(label)
 
-            event['labels'] = labels
+        event['labels'] = labels
     return json.dumps(event)
 
