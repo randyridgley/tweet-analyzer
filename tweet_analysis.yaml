@@ -184,6 +184,7 @@ Resources:
                       - "firehose:*"
                       - "rekognition:*"
                       - "s3:*"
+                      - "SNS:*"
                     Resource: "*"
 
   RawTweetStream:
