@@ -19,5 +19,5 @@ def handler(event, context):
         sentiment = "pos"
     event['sentiment'] = sentiment
     event['sentimentValue'] = sentiment_value    
-    return json.dumps(event)
+    return event
 

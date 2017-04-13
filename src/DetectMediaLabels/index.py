@@ -33,9 +33,13 @@ def handler(event, context):
                 image_data = BytesIO(urlopen(media['media_url_https']).read())
 
                 for label in detect_labels(image_data.getvalue(), labels, confidence):
+                    if "Person" in label.values() or "People" in label.values():
+                        event['hasPerson'] = True
+
                     label['media_url_https'] = media['media_url_https']
+                    print(label)
                     labels.append(label)
 
         event['labels'] = labels
-    return json.dumps(event)
+    return event
 
