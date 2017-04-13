@@ -10,7 +10,6 @@ import os
 
 COMPARE_FACE_BUCKET = os.environ['COMPARE_FACE_BUCKET']
 COMPARE_FACE_KEY = os.environ['COMPARE_FACE_KEY']
-SIMILARITY_THRESHOLD = float(os.environ['SIMILARITY_THRESHOLD'])
 MATCH_TOPIC_ARN = os.environ['MATCH_TOPIC_ARN']
 region = os.environ['AWS_DEFAULT_REGION']
 
@@ -32,8 +31,7 @@ def handler(event, context):
                 },
                 TargetImage={
                     'Bytes' : image_data.getvalue()
-                },
-                SimilarityThreshold=SIMILARITY_THRESHOLD
+                }
             )
             print('Match response ', json.dumps(response))
             if len(response['FaceMatches'])!=0:
