@@ -181,6 +181,7 @@ Resources:
                       - "iam:*"
                       - "cloudformation:*"
                       - "logs:*"
+                      - "firehose:*"
                     Resource: "*"
 
   RawTweetStream:
