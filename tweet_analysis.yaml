@@ -392,8 +392,8 @@ Resources:
               "Type" : "Choice",
               "Choices": [
                 {
-                  "Variable": "$.num_of_regions",
-                  "NumericGreaterThan": 0,
+                  "Variable": "$.hasPerson",
+                  "BooleanEquals": True,
                   "Next": "GetMediaFaces"
                 }
               ],
