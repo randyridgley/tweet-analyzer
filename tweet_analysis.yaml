@@ -182,6 +182,7 @@ Resources:
                       - "cloudformation:*"
                       - "logs:*"
                       - "firehose:*"
+                      - "rekognition:*"
                     Resource: "*"
 
   RawTweetStream:
