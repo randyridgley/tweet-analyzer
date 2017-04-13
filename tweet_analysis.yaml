@@ -183,6 +183,7 @@ Resources:
                       - "logs:*"
                       - "firehose:*"
                       - "rekognition:*"
+                      - "s3:*"
                     Resource: "*"
 
   RawTweetStream:
