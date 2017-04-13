@@ -29,6 +29,7 @@ def detect_labels(image):
 def handler(event, context):
     if 'media' in event:
         labels = []
+        event['hasPerson'] = False
         for media in event['media']:
             if media['type'] == 'photo':
                 image_data = BytesIO(urlopen(media['media_url_https']).read())
