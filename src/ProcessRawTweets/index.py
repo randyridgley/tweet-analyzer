@@ -29,6 +29,7 @@ def handler(event, context):
         tweet = json.loads(payload)
         data = {}
         data['text'] = tweet['text']
+        data['created_at'] = tweet['created_at']
         data['screen_name'] = tweet['user']['screen_name']
         data['id'] = tweet['id']
         data['place'] = tweet['place']
