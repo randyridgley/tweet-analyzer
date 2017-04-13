@@ -274,7 +274,7 @@ Resources:
       Environment:
         Variables: 
           COMPARE_FACE_BUCKET: !Ref ComparisonFaceBucket
-          COMPARE_FACE_Key: !Ref ComparisonFaceKey
+          COMPARE_FACE_KEY: !Ref ComparisonFaceKey
           SIMILARITY_THRESHOLD: !Ref SimilarityThreshold
           MATCH_TOPIC_ARN: !Ref MatchSNSTopic
   DetectMediaFaces:
