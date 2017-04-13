@@ -24,5 +24,5 @@ def handler(event, context):
         Record={
             'Data': tweet
         })
-    return tweet
+    return event
 

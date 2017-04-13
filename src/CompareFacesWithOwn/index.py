@@ -36,7 +36,7 @@ def handler(event, context):
             print('Match response ', json.dumps(response))
             if len(response['FaceMatches'])!=0:
                 msg = "Found a match at %s" % label['media_url_https']
-                response = client.publish(
+                response = sns.publish(
                     TopicArn=MATCH_TOPIC_ARN,
                     Message=msg,
                     Subject='Found a match on twitter',

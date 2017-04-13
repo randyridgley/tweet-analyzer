@@ -31,7 +31,7 @@ def handler(event, context):
         data['text'] = tweet['text']
         data['created_at'] = tweet['created_at']
         data['screen_name'] = tweet['user']['screen_name']
-        data['id'] = tweet['id']
+        data['id'] = tweet['id_str']
         data['place'] = tweet['place']
         data['verified'] = tweet['user']['verified']
 
