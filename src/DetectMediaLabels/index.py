@@ -26,7 +26,7 @@ def detect_labels(image, max_labels=10, min_confidence=95):
     return response['Labels']
 
 def handler(event, context):
-    if 'media' in tweet['entities']:
+    if 'media' in event['entities']:
         labels = {}
         for media in event['entities']['media']:
             if media['type'] == 'photo':
