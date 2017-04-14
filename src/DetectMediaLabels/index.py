@@ -51,5 +51,6 @@ def handler(event, context):
             tweet['image_analysis']['labels'] = labels
             tweets.append(tweet)
     response['tweets'] = tweets
+    print(json.dumps(response))
     return response
 

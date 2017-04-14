@@ -23,6 +23,8 @@ print('Delivery Stream name is ', DELIVERY_STREAM_NAME)
 def handler(event, context):
     #print("Received event: " + json.dumps(event, indent=2))
     tweets = []
+    count = 0
+
     for record in event['Records']:
         # Kinesis data is base64 encoded so decode here
         payload = base64.b64decode(record['kinesis']['data'])
@@ -59,9 +61,19 @@ def handler(event, context):
 
             data['media'] = images
             
-            sf_payload = json.dumps(data)
-            tweets.append(sf_payload)
+            tweets.append(data)
+            count += 1
 
+            if count >= 20:
+                sf_payload = json.dumps(tweets)
+                print(sf_payload)
+                sf.start_execution(
+                    stateMachineArn=os.environ['STATE_MACHINE_ARN'],
+                    input=sf_payload,
+                )     
+                tweets = []
+                count = 0
+                
             # Send the raw tweets to the firehose for historical storage of tweet for ad-hoc querying later
             print("Sending Record to firehose")
             firehose.put_record(DeliveryStreamName=DELIVERY_STREAM_NAME,
