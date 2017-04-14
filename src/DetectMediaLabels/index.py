@@ -31,6 +31,7 @@ def handler(event, context):
     response = {}
 
     for tweet in event:
+        tweet['image_analysis'] = {}
         if 'media' in tweet:
             labels = []
             tweet['hasPerson'] = False
@@ -47,9 +48,8 @@ def handler(event, context):
                         label['media_url_https'] = media['media_url_https']
                         print(label)
                         labels.append(label)
-            tweet['image_analysis'] = {}
             tweet['image_analysis']['labels'] = labels
-            tweets.append(tweet)
+        tweets.append(tweet)
     response['tweets'] = tweets
     print(json.dumps(response))
     return response
