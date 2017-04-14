@@ -52,6 +52,7 @@ Resources:
                   Service:
                   - "lambda.amazonaws.com"
                   - "firehose.amazonaws.com"
+                  - "s3.amazonaws.com"
           Policies:
             - 
               PolicyName: "InlinePolicy"
@@ -115,6 +116,7 @@ Resources:
                   Service:
                     - "lambda.amazonaws.com"
                     - "firehose.amazonaws.com"
+                    - "s3.amazonaws.com"
           Policies:
             - PolicyName: "ProcessAnalyzedTweetStreamRole"
               PolicyDocument:
@@ -160,7 +162,7 @@ Resources:
                   - "sts:AssumeRole"
                 Principal:
                   Service:
-                    - "lambda.amazonaws.com"
+                    - "lambda.amazonaws.com"                  
           Policies:
             -
               PolicyName: "InlinePolicy"

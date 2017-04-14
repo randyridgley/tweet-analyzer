@@ -27,6 +27,10 @@ def handler(event, context):
         payload = base64.b64decode(record['kinesis']['data'])
         print("Decoded payload: " + payload)
         tweet = json.loads(payload)
+
+        if not tweet.has_key('text'):
+            continue
+        
         data = {}
         data['text'] = tweet['text']
         data['created_at'] = tweet['created_at']
@@ -55,12 +59,14 @@ def handler(event, context):
         
         if images.count > 0:
             sf_payload = json.dumps(data)
+            print('starting state machine for tweet.')
             sf.start_execution(
                 stateMachineArn=os.environ['STATE_MACHINE_ARN'],
                 input=sf_payload,
             )
 
         # Send the raw tweets to the firehose for historical storage of tweet for ad-hoc querying later
+        print("Sending Record to firehose")
         firehose.put_record(DeliveryStreamName=DELIVERY_STREAM_NAME,
             Record={
                 'Data': payload

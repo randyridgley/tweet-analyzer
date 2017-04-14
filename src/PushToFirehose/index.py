@@ -19,6 +19,7 @@ print('Delivery Stream name is ', DELIVERY_STREAM_NAME)
     
 def handler(event, context):
     tweet = json.dumps(event)
+    print(tweet)
     # Send the processed tweets to the firehose for use in Athena and Quicksight
     firehose.put_record(DeliveryStreamName=DELIVERY_STREAM_NAME,
         Record={
