@@ -22,7 +22,6 @@ def detect_faces(image, attributes=['ALL']):
 
 def handler(event, context):
     tweets = []
-    response = []
 
     for tweet in event:
         people = []
@@ -54,6 +53,7 @@ def handler(event, context):
                         people.append(person)
             tweet['image_analysis']['people'] = people
             tweet['image_analysis']['people_count'] = people_count
-            tweets.append(tweet)
+        
+        tweets.append(tweet)
     return tweets
 

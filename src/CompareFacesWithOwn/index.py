@@ -46,6 +46,7 @@ def handler(event, context):
                             Subject='Found a match on twitter',
                             MessageStructure='string',
                         )
+        
         tweets.append(tweet)
     
     return tweets

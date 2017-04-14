@@ -29,13 +29,15 @@ def detect_labels(image):
 def handler(event, context):
     tweets = []
     response = {}
-
+    response['hasPerson'] = False
+    
     for tweet in event:
         tweet['image_analysis'] = {}
+
         if 'media' in tweet:
             labels = []
             tweet['hasPerson'] = False
-            response['hasPerson'] = False
+            
             for media in tweet['media']:
                 if media['type'] == 'photo':
                     image_data = BytesIO(urlopen(media['media_url_https']).read())
@@ -49,6 +51,7 @@ def handler(event, context):
                         print(label)
                         labels.append(label)
             tweet['image_analysis']['labels'] = labels
+
         tweets.append(tweet)
     response['tweets'] = tweets
     print(json.dumps(response))

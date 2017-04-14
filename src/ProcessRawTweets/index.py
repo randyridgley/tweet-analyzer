@@ -84,7 +84,7 @@ def handler(event, context):
             print(e)
             pass
 
-    if len(tweet) > 0:
+    if tweets:
         print('starting state machine for tweets.')
         print(tweets)
         sf_payload = json.dumps(tweets)
