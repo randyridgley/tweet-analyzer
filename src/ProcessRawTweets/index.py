@@ -57,13 +57,12 @@ def handler(event, context):
 
         data['media'] = images
         
-        if images.count > 0:
-            sf_payload = json.dumps(data)
-            print('starting state machine for tweet.')
-            sf.start_execution(
-                stateMachineArn=os.environ['STATE_MACHINE_ARN'],
-                input=sf_payload,
-            )
+        sf_payload = json.dumps(data)
+        print('starting state machine for tweet.')
+        sf.start_execution(
+            stateMachineArn=os.environ['STATE_MACHINE_ARN'],
+            input=sf_payload,
+        )
 
         # Send the raw tweets to the firehose for historical storage of tweet for ad-hoc querying later
         print("Sending Record to firehose")
