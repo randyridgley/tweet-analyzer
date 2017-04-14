@@ -125,6 +125,7 @@ Resources:
                 - "iam:DeleteRole"
                 - "iam:PutRolePolicy"
                 - "iam:DeleteRolePolicy"
+                - "iam:UpdateAssumeRolePolicyDocument"
               Resource: 
                 - !Join [":", [ "arn:aws:iam:", !Ref "AWS::AccountId", "role/*" ]]
             - Effect: Allow

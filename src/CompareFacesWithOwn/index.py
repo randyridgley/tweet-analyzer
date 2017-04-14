@@ -18,30 +18,34 @@ rekognition = boto3.client("rekognition", region)
 sns = boto3.client('sns')
 
 def handler(event, context):
-    for label in event['image_analysis']['labels']:
-        if "Person" in label.values():
-            image_data = BytesIO(urlopen(label['media_url_https']).read())
+    tweets = []
 
-            response = rekognition.compare_faces(
-                SourceImage={
-                    'S3Object': {
-                        'Bucket': COMPARE_FACE_BUCKET,
-                        'Name': COMPARE_FACE_KEY
+    for tweet in event:
+        for label in event['image_analysis']['labels']:
+            if "Person" in label.values():
+                image_data = BytesIO(urlopen(label['media_url_https']).read())
+
+                response = rekognition.compare_faces(
+                    SourceImage={
+                        'S3Object': {
+                            'Bucket': COMPARE_FACE_BUCKET,
+                            'Name': COMPARE_FACE_KEY
+                        }
+                    },
+                    TargetImage={
+                        'Bytes' : image_data.getvalue()
                     }
-                },
-                TargetImage={
-                    'Bytes' : image_data.getvalue()
-                }
-            )
-            print('Match response ', json.dumps(response))
-            if len(response['FaceMatches'])!=0:
-                msg = "Found a match at %s" % label['media_url_https']
-                response = sns.publish(
-                    TopicArn=MATCH_TOPIC_ARN,
-                    Message=msg,
-                    Subject='Found a match on twitter',
-                    MessageStructure='string',
                 )
+                print('Match response ', json.dumps(response))
+                if len(response['FaceMatches'])!=0:
+                    msg = "Found a match at %s" % label['media_url_https']
+                    response = sns.publish(
+                        TopicArn=MATCH_TOPIC_ARN,
+                        Message=msg,
+                        Subject='Found a match on twitter',
+                        MessageStructure='string',
+                    )
+        tweets.append(tweet)
     
-    return event
+    return tweets
 

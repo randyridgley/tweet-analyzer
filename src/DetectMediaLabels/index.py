@@ -27,21 +27,29 @@ def detect_labels(image):
     return response['Labels']
 
 def handler(event, context):
-    if 'media' in event:
-        labels = []
-        event['hasPerson'] = False
-        for media in event['media']:
-            if media['type'] == 'photo':
-                image_data = BytesIO(urlopen(media['media_url_https']).read())
+    tweets = []
+    response = {}
 
-                for label in detect_labels(image_data.getvalue()):
-                    if "Person" in label.values() or "People" in label.values():
-                        event['hasPerson'] = True
+    for tweet in event:
+        if 'media' in tweet:
+            labels = []
+            tweet['hasPerson'] = False
+            response['hasPerson'] = False
+            for media in tweet['media']:
+                if media['type'] == 'photo':
+                    image_data = BytesIO(urlopen(media['media_url_https']).read())
 
-                    label['media_url_https'] = media['media_url_https']
-                    print(label)
-                    labels.append(label)
-        event['image_analysis'] = {}
-        event['image_analysis']['labels'] = labels
-    return event
+                    for label in detect_labels(image_data.getvalue()):
+                        if "Person" in label.values() or "People" in label.values():
+                            tweet['hasPerson'] = True
+                            response['hasPerson'] = True
+
+                        label['media_url_https'] = media['media_url_https']
+                        print(label)
+                        labels.append(label)
+            tweet['image_analysis'] = {}
+            tweet['image_analysis']['labels'] = labels
+            tweets.append(tweet)
+    response['tweets'] = tweets
+    return response
 

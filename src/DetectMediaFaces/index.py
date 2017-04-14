@@ -21,34 +21,39 @@ def detect_faces(image, attributes=['ALL']):
 	return response['FaceDetails']
 
 def handler(event, context):
-    people = []
-    people_count = 0
+    tweets = []
+    response = []
 
-    if 'labels' in event['image_analysis']:
-        for label in event['image_analysis']['labels']:
-            if "Person" in label.values():
-                people_count +=1
-                image_data = BytesIO(urlopen(label['media_url_https']).read())
-                person = {}
-                for face in detect_faces(image_data.getvalue()):
-                    #store details
-                    print(json.dumps(face))
-                    person['BoundingBox'] = face['BoundingBox']
-                    if 'Smile' in face:
-                        person['Smile'] = face['Smile']['Confidence']
-                    if 'Gender' in face:
-                        person['Gender'] = face['Gender']['Value']
-                    if 'AgeRange' in face:
-                        person['AgeRange'] = face['AgeRange']
-                    if 'Emotions' in face:
-                        emotions = []
+    for tweet in event:
+        people = []
+        people_count = 0
 
-                        for e in face['Emotions']:
-                            emotions.append(e)
-                        
-                        person['emotions'] = emotions
-                    people.append(person)
-        event['image_analysis']['people'] = people
-        event['image_analysis']['people_count'] = people_count
-    return event
+        if 'labels' in tweet['image_analysis']:
+            for label in tweet['image_analysis']['labels']:
+                if "Person" in label.values():
+                    people_count +=1
+                    image_data = BytesIO(urlopen(label['media_url_https']).read())
+                    person = {}
+                    for face in detect_faces(image_data.getvalue()):
+                        #store details
+                        print(json.dumps(face))
+                        person['BoundingBox'] = face['BoundingBox']
+                        if 'Smile' in face:
+                            person['Smile'] = face['Smile']['Confidence']
+                        if 'Gender' in face:
+                            person['Gender'] = face['Gender']['Value']
+                        if 'AgeRange' in face:
+                            person['AgeRange'] = face['AgeRange']
+                        if 'Emotions' in face:
+                            emotions = []
+
+                            for e in face['Emotions']:
+                                emotions.append(e)
+                            
+                            person['emotions'] = emotions
+                        people.append(person)
+            tweet['image_analysis']['people'] = people
+            tweet['image_analysis']['people_count'] = people_count
+            tweets.append(tweet)
+    return tweets
 

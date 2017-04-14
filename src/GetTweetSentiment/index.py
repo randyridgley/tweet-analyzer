@@ -9,16 +9,21 @@ from vaderSentiment.vaderSentiment import SentimentIntensityAnalyzer
 print('Loading function')
     
 def handler(event, context):
-    sid = SentimentIntensityAnalyzer()
-    text = event['text']
-    sentiment_value = sid.polarity_scores(text)['compound']
-    print(sentiment_value)
-    if float(sentiment_value) < 0.0:
-        sentiment = "neg"
-    elif float(sentiment_value) >= 0.0:
-        sentiment = "pos"
-    event['text_analysis'] = {}
-    event['text_analysis']['sentiment'] = sentiment
-    event['text_analysis']['sentimentValue'] = sentiment_value    
-    return event
+    print(event)
+    tweets = []
+    for tweet in event:
+        sid = SentimentIntensityAnalyzer()
+        text = tweet['text']
+        sentiment_value = sid.polarity_scores(text)['compound']
+        print(sentiment_value)
+        if float(sentiment_value) < 0.0:
+            sentiment = "neg"
+        elif float(sentiment_value) >= 0.0:
+            sentiment = "pos"
+        tweet['text_analysis'] = {}
+        tweet['text_analysis']['sentiment'] = sentiment
+        tweet['text_analysis']['sentimentValue'] = sentiment_value    
+        tweets.append(tweet)
+
+    return tweets
 

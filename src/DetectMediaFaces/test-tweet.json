@@ -1,119 +1,121 @@
-{
-    "lang": "en",
-    "verified": false,
-    "screen_name": "Queen_Minajesty",
-    "hasPerson": true,
-    "text": "I love my husband @OBJ_3 he so active https://t.co/o9ZWXeIli4",
-    "hashtags": [
-        {
-            "indices": [
-                0,
-                10
-            ],
-            "text": "Throwback"
-        },
-        {
-            "indices": [
-                13,
-                28
-            ],
-            "text": "OdellBeckhamJr"
-        }
-    ],
-    "timestamp_ms": "1491886252349",
-    "image_analysis": {
-        "labels": [
+[
+    {
+        "lang": "en",
+        "verified": false,
+        "screen_name": "Queen_Minajesty",
+        "hasPerson": true,
+        "text": "I love my husband @OBJ_3 he so active https://t.co/o9ZWXeIli4",
+        "hashtags": [
             {
-                "Confidence": 99.23363494873047,
-                "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/851650753928327168/pu/img/2ZXh7H5uqiUkPnal.jpg",
-                "Name": "People"
+                "indices": [
+                    0,
+                    10
+                ],
+                "text": "Throwback"
             },
             {
-                "Confidence": 99.233642578125,
-                "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/851650753928327168/pu/img/2ZXh7H5uqiUkPnal.jpg",
-                "Name": "Person"
-            },
-            {
-                "Confidence": 99.22407531738281,
-                "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/851650753928327168/pu/img/2ZXh7H5uqiUkPnal.jpg",
-                "Name": "Human"
+                "indices": [
+                    13,
+                    28
+                ],
+                "text": "OdellBeckhamJr"
             }
-        ]
-    },
-    "text_analysis": {
-        "sentimentValue": 0.8267,
-        "sentiment": "pos"
-    },
-    "place": {
-        "full_name": "Las Vegas, NV",
-        "url": "https://api.twitter.com/1.1/geo/id/5c2b5e46ab891f07.json",
-        "country": "United States",
-        "place_type": "city",
-        "bounding_box": {
-            "type": "Polygon",
-            "coordinates": [
-                [
-                    [
-                        -115.384091,
-                        36.129459
-                    ],
-                    [
-                        -115.384091,
-                        36.336371
-                    ],
-                    [
-                        -115.062159,
-                        36.336371
-                    ],
-                    [
-                        -115.062159,
-                        36.129459
-                    ]
-                ]
+        ],
+        "timestamp_ms": "1491886252349",
+        "image_analysis": {
+            "labels": [
+                {
+                    "Confidence": 99.23363494873047,
+                    "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/851650753928327168/pu/img/2ZXh7H5uqiUkPnal.jpg",
+                    "Name": "People"
+                },
+                {
+                    "Confidence": 99.233642578125,
+                    "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/851650753928327168/pu/img/2ZXh7H5uqiUkPnal.jpg",
+                    "Name": "Person"
+                },
+                {
+                    "Confidence": 99.22407531738281,
+                    "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/851650753928327168/pu/img/2ZXh7H5uqiUkPnal.jpg",
+                    "Name": "Human"
+                }
             ]
         },
-        "country_code": "US",
-        "attributes": {},
-        "id": "5c2b5e46ab891f07",
-        "name": "Las Vegas"
-    },
-    "media": [
-        {
-            "expanded_url": "https://twitter.com/thacelebritea/status/851651065640620032/video/1",
-            "sizes": {
-                "large": {
-                    "h": 480,
-                    "resize": "fit",
-                    "w": 480
-                },
-                "small": {
-                    "h": 340,
-                    "resize": "fit",
-                    "w": 340
-                },
-                "medium": {
-                    "h": 480,
-                    "resize": "fit",
-                    "w": 480
-                },
-                "thumb": {
-                    "h": 150,
-                    "resize": "crop",
-                    "w": 150
-                }
+        "text_analysis": {
+            "sentimentValue": 0.8267,
+            "sentiment": "pos"
+        },
+        "place": {
+            "full_name": "Las Vegas, NV",
+            "url": "https://api.twitter.com/1.1/geo/id/5c2b5e46ab891f07.json",
+            "country": "United States",
+            "place_type": "city",
+            "bounding_box": {
+                "type": "Polygon",
+                "coordinates": [
+                    [
+                        [
+                            -115.384091,
+                            36.129459
+                        ],
+                        [
+                            -115.384091,
+                            36.336371
+                        ],
+                        [
+                            -115.062159,
+                            36.336371
+                        ],
+                        [
+                            -115.062159,
+                            36.129459
+                        ]
+                    ]
+                ]
             },
-            "url": "https://t.co/EhIR3C0Lsn",
-            "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/851650753928327168/pu/img/2ZXh7H5uqiUkPnal.jpg",
-            "display_url": "pic.twitter.com/EhIR3C0Lsn",
-            "id_str": "851650753928327168",
-            "indices": [
-                29,
-                52
-            ],
-            "type": "photo",
-            "id": 851650753928327200,
-            "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/851650753928327168/pu/img/2ZXh7H5uqiUkPnal.jpg"
-        }
-    ],
-    "id": 851658786230030300
-}
+            "country_code": "US",
+            "attributes": {},
+            "id": "5c2b5e46ab891f07",
+            "name": "Las Vegas"
+        },
+        "media": [
+            {
+                "expanded_url": "https://twitter.com/thacelebritea/status/851651065640620032/video/1",
+                "sizes": {
+                    "large": {
+                        "h": 480,
+                        "resize": "fit",
+                        "w": 480
+                    },
+                    "small": {
+                        "h": 340,
+                        "resize": "fit",
+                        "w": 340
+                    },
+                    "medium": {
+                        "h": 480,
+                        "resize": "fit",
+                        "w": 480
+                    },
+                    "thumb": {
+                        "h": 150,
+                        "resize": "crop",
+                        "w": 150
+                    }
+                },
+                "url": "https://t.co/EhIR3C0Lsn",
+                "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/851650753928327168/pu/img/2ZXh7H5uqiUkPnal.jpg",
+                "display_url": "pic.twitter.com/EhIR3C0Lsn",
+                "id_str": "851650753928327168",
+                "indices": [
+                    29,
+                    52
+                ],
+                "type": "photo",
+                "id": 851650753928327200,
+                "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/851650753928327168/pu/img/2ZXh7H5uqiUkPnal.jpg"
+            }
+        ],
+        "id": 851658786230030300
+    }
+]

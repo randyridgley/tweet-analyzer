@@ -407,7 +407,7 @@ Resources:
             "GetMediaFaces": {
                 "Type": "Task",
                 "Resource": "${DetectMediaFaces.Arn}",
-                "InputPath": "$",
+                "InputPath": "$.tweets",
                 "Next": "CompareFacesWithOwn"
             },
             "CompareFacesWithOwn": {

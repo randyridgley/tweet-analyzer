@@ -22,6 +22,7 @@ print('Delivery Stream name is ', DELIVERY_STREAM_NAME)
     
 def handler(event, context):
     #print("Received event: " + json.dumps(event, indent=2))
+    tweets = []
     for record in event['Records']:
         # Kinesis data is base64 encoded so decode here
         payload = base64.b64decode(record['kinesis']['data'])
@@ -31,44 +32,54 @@ def handler(event, context):
         if not tweet.has_key('text'):
             continue
         
-        data = {}
-        data['text'] = tweet['text']
-        data['created_at'] = tweet['created_at']
-        data['screen_name'] = tweet['user']['screen_name']
-        data['id'] = tweet['id_str']
-        data['place'] = tweet['place']
-        data['verified'] = tweet['user']['verified']
+        try:
+            data = {}
+            data['text'] = tweet['text']
+            data['created_at'] = tweet['created_at']
+            data['screen_name'] = tweet['user']['screen_name']
+            data['id'] = tweet['id_str']
+            data['place'] = tweet['place']
+            data['verified'] = tweet['user']['verified']
 
-        if tweet['entities'].has_key('hashtags'):
-            data['hashtags'] = tweet['entities']['hashtags']
+            if tweet['entities'].has_key('hashtags'):
+                data['hashtags'] = tweet['entities']['hashtags']
+                
+            data['timestamp_ms'] = tweet['timestamp_ms']
+            data['lang'] = tweet['lang']
+
+            images = []
+            if 'entities' in tweet and 'media' in tweet['entities']:
+                for media in  tweet['entities']['media']:
+                    image = {}
+                    image['media_url_https'] = media['media_url_https']
+                    image['id'] = media['id']
+                    image['type'] = media['type']
+                    image['url'] = media['url']
+                    images.append(image)
+
+            data['media'] = images
             
-        data['timestamp_ms'] = tweet['timestamp_ms']
-        data['lang'] = tweet['lang']
+            sf_payload = json.dumps(data)
+            tweets.append(sf_payload)
 
-        images = []
-        if 'entities' in tweet and 'media' in tweet['entities']:
-            for media in  tweet['entities']['media']:
-                image = {}
-                image['media_url_https'] = media['media_url_https']
-                image['id'] = media['id']
-                image['type'] = media['type']
-                image['url'] = media['url']
-                images.append(image)
+            # Send the raw tweets to the firehose for historical storage of tweet for ad-hoc querying later
+            print("Sending Record to firehose")
+            firehose.put_record(DeliveryStreamName=DELIVERY_STREAM_NAME,
+                Record={
+                    'Data': payload
+                })
+        except:
+            print(e)
+            pass
 
-        data['media'] = images
-        
-        sf_payload = json.dumps(data)
-        print('starting state machine for tweet.')
-        sf.start_execution(
-            stateMachineArn=os.environ['STATE_MACHINE_ARN'],
-            input=sf_payload,
-        )
+    print('starting state machine for tweets.')
+    print(tweets)
+    sf_payload = json.dumps(tweets)
+    print(sf_payload)
 
-        # Send the raw tweets to the firehose for historical storage of tweet for ad-hoc querying later
-        print("Sending Record to firehose")
-        firehose.put_record(DeliveryStreamName=DELIVERY_STREAM_NAME,
-            Record={
-                'Data': payload
-            })
-    return data
+    sf.start_execution(
+        stateMachineArn=os.environ['STATE_MACHINE_ARN'],
+        input=sf_payload,
+    )        
+    return 'Successfully processed {} records.'.format(len(event['Records']))
 

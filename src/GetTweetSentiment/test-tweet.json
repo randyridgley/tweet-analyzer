@@ -1,95 +1,53 @@
-{
-    "text": "I love my husband @OBJ_3 he so active https://t.co/o9ZWXeIli4",
-    "screen_name": "Queen_Minajesty",
-    "verified": false,
-    "timestamp_ms": "1491886252349",
-    "id": 851658786230030300,
-    "lang": "en",
-    "place": {
-        "full_name": "Las Vegas, NV",
-        "url": "https://api.twitter.com/1.1/geo/id/5c2b5e46ab891f07.json",
-        "country": "United States",
-        "place_type": "city",
-        "bounding_box": {
-            "type": "Polygon",
-            "coordinates": [
-                [
+[
+    {
+        "lang": "en",
+        "verified": false,
+        "screen_name": "mego_rex",
+        "text": ".@GordonRamsay made Buffalo chicken dip for my birthday, looks a mess but tastes \\ud83d\\udcaf https://t.co/iByXnJOtJ2",
+        "created_at": "Thu Apr 13 18:01:56 +0000 2017",
+        "hashtags": [],
+        "timestamp_ms": "1492106516864",
+        "place": {
+            "full_name": "Florida, USA",
+            "url": "https://api.twitter.com/1.1/geo/id/4ec01c9dbc693497.json",
+            "country": "United States",
+            "place_type": "admin",
+            "bounding_box": {
+                "type": "Polygon",
+                "coordinates": [
                     [
-                        -115.384091,
-                        36.129459
-                    ],
-                    [
-                        -115.384091,
-                        36.336371
-                    ],
-                    [
-                        -115.062159,
-                        36.336371
-                    ],
-                    [
-                        -115.062159,
-                        36.129459
+                        [
+                            -87.634643,
+                            24.396308
+                        ],
+                        [
+                            -87.634643,
+                            31.001056
+                        ],
+                        [
+                            -79.974307,
+                            31.001056
+                        ],
+                        [
+                            -79.974307,
+                            24.396308
+                        ]
                     ]
                 ]
-            ]
-        },
-        "country_code": "US",
-        "attributes": {},
-        "id": "5c2b5e46ab891f07",
-        "name": "Las Vegas"
-    },
-    "hashtags": [
-        {
-            "indices": [
-                0,
-                10
-            ],
-            "text": "Throwback"
-        },
-        {
-            "indices": [
-                13,
-                28
-            ],
-            "text": "OdellBeckhamJr"
-        }
-    ],
-    "media": [
-        {
-            "expanded_url": "https://twitter.com/thacelebritea/status/851651065640620032/video/1",
-            "display_url": "pic.twitter.com/EhIR3C0Lsn",
-            "url": "https://t.co/EhIR3C0Lsn",
-            "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/851650753928327168/pu/img/2ZXh7H5uqiUkPnal.jpg",
-            "id_str": "851650753928327168",
-            "sizes": {
-                "large": {
-                    "h": 480,
-                    "resize": "fit",
-                    "w": 480
-                },
-                "small": {
-                    "h": 340,
-                    "resize": "fit",
-                    "w": 340
-                },
-                "medium": {
-                    "h": 480,
-                    "resize": "fit",
-                    "w": 480
-                },
-                "thumb": {
-                    "h": 150,
-                    "resize": "crop",
-                    "w": 150
-                }
             },
-            "indices": [
-                29,
-                52
-            ],
-            "type": "photo",
-            "id": 851650753928327200,
-            "media_url": "http://pbs.twimg.com/ext_tw_video_thumb/851650753928327168/pu/img/2ZXh7H5uqiUkPnal.jpg"
-        }
-    ]
-}
+            "country_code": "US",
+            "attributes": {},
+            "id": "4ec01c9dbc693497",
+            "name": "Florida"
+        },
+        "media": [
+            {
+                "url": "https://t.co/iByXnJOtJ2",
+                "media_url_https": "https://pbs.twimg.com/media/C9T7Y7VXsAE_6hh.jpg",
+                "type": "photo",
+                "id": 852582635142623200
+            }
+        ],
+        "id": "852582642566516736"
+    }
+]
