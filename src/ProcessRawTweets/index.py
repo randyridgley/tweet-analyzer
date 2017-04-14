@@ -73,7 +73,7 @@ def handler(event, context):
                 )     
                 tweets = []
                 count = 0
-                
+
             # Send the raw tweets to the firehose for historical storage of tweet for ad-hoc querying later
             print("Sending Record to firehose")
             firehose.put_record(DeliveryStreamName=DELIVERY_STREAM_NAME,
@@ -84,14 +84,14 @@ def handler(event, context):
             print(e)
             pass
 
-    print('starting state machine for tweets.')
-    print(tweets)
-    sf_payload = json.dumps(tweets)
-    print(sf_payload)
-
-    sf.start_execution(
-        stateMachineArn=os.environ['STATE_MACHINE_ARN'],
-        input=sf_payload,
-    )        
+    if len(tweet) > 0:
+        print('starting state machine for tweets.')
+        print(tweets)
+        sf_payload = json.dumps(tweets)
+        print(sf_payload)
+        sf.start_execution(
+            stateMachineArn=os.environ['STATE_MACHINE_ARN'],
+            input=sf_payload,
+        )        
     return 'Successfully processed {} records.'.format(len(event['Records']))
 
