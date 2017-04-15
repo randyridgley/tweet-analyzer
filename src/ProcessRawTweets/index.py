@@ -49,7 +49,7 @@ def handler(event, context):
                 data['place_full_name'] = tweet['place']['full_name']
             
 
-            if tweet['entities'].has_key('hashtags'):
+            if tweet['entities'].has_key('hashtags') and tweet['entities']['hashtags']:
                 data['hashtags'] = [hashtag['text'] for hashtag in tweet['entities']['hashtags']]
                 
             data['timestamp_ms'] = tweet['timestamp_ms']
