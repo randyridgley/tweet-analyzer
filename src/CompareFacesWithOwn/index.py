@@ -21,8 +21,8 @@ def handler(event, context):
     tweets = []
 
     for tweet in event:
-        if 'image_analysis' in event:
-            for label in event['image_analysis']['labels']:
+        if 'image_analysis' in tweet:
+            for label in tweet['image_analysis']['labels']:
                 if "Person" in label.values():
                     image_data = BytesIO(urlopen(label['media_url_https']).read())
 
