@@ -42,7 +42,7 @@ def handler(event, context):
             data['id'] = tweet['id_str']
             data['verified'] = tweet['user']['verified']
             
-            if tweet.has_key('place'):
+            if tweet.has_key('place') and tweet['place']:
                 print('updating place attributes')
                 data['place_country_code'] = tweet['place']['country_code']
                 data['place_coordinates'] = tweet['place']['bounding_box']['coordinates']
