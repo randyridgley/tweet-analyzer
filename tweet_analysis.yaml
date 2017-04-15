@@ -402,7 +402,7 @@ Resources:
                   "Next": "GetMediaFaces"
                 }
               ],
-              "Default": "PushToFirehoseNoFaces"
+              "Default": "PushToFirehose"
             },
             "GetMediaFaces": {
                 "Type": "Task",
@@ -419,12 +419,6 @@ Resources:
             "PushToFirehose": {
               "Type" : "Task",
               "Resource": "${PushToFirehose.Arn}",
-              "End": true
-            },
-            "PushToFirehoseNoFaces": {
-              "Type" : "Task",
-              "Resource": "${PushToFirehose.Arn}",
-              "InputPath": "$.tweets",
               "End": true
             }
           }
