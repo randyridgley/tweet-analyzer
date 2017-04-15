@@ -22,9 +22,9 @@ def handler(event, context):
             sentiment = "positive"
         else:
             sentiment = "neutral"
-        tweet['text_analysis'] = {}
-        tweet['text_analysis']['sentiment'] = sentiment
-        tweet['text_analysis']['sentimentValue'] = sentiment_value    
+
+        tweet['text_analysis_sentiment'] = sentiment
+        tweet['text_analysis_sentiment_value'] = sentiment_value    
         tweets.append(tweet)
 
     return tweets
