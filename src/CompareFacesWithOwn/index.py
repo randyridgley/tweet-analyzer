@@ -23,7 +23,7 @@ def handler(event, context):
     for tweet in event:
         if 'image_analysis_labels' in tweet:
             for label in tweet['image_analysis_labels']:
-                if "Person" in label.values():
+                if label == "Person":
                     try:
                         image_data = BytesIO(urlopen(tweet['media_url_https']).read())
 
