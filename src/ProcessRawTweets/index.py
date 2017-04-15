@@ -40,11 +40,13 @@ def handler(event, context):
             data['created_at'] = tweet['created_at']
             data['screen_name'] = tweet['user']['screen_name']
             data['id'] = tweet['id_str']
-            data['place'] = tweet['place']
+            data['place_country_code'] = tweet['place']['country_code']
+            data['place_coordinates'] = tweet['place']['bounding_box']['coordinates']
+            data['place_full_name'] = tweet['place']['full_name']
             data['verified'] = tweet['user']['verified']
 
             if tweet['entities'].has_key('hashtags'):
-                data['hashtags'] = tweet['entities']['hashtags']
+                data['hashtags'] = [hashtag['text'] for hashtag in tweet['entities']['hashtags']]
                 
             data['timestamp_ms'] = tweet['timestamp_ms']
             data['lang'] = tweet['lang']
