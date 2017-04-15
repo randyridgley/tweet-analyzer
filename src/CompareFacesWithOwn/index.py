@@ -24,28 +24,31 @@ def handler(event, context):
         if 'image_analysis' in tweet:
             for label in tweet['image_analysis']['labels']:
                 if "Person" in label.values():
-                    image_data = BytesIO(urlopen(label['media_url_https']).read())
+                    try:
+                        image_data = BytesIO(urlopen(label['media_url_https']).read())
 
-                    response = rekognition.compare_faces(
-                        SourceImage={
-                            'S3Object': {
-                                'Bucket': COMPARE_FACE_BUCKET,
-                                'Name': COMPARE_FACE_KEY
+                        response = rekognition.compare_faces(
+                            SourceImage={
+                                'S3Object': {
+                                    'Bucket': COMPARE_FACE_BUCKET,
+                                    'Name': COMPARE_FACE_KEY
+                                }
+                            },
+                            TargetImage={
+                                'Bytes' : image_data.getvalue()
                             }
-                        },
-                        TargetImage={
-                            'Bytes' : image_data.getvalue()
-                        }
-                    )
-                    print('Match response ', json.dumps(response))
-                    if len(response['FaceMatches'])!=0:
-                        msg = "Found a match at %s" % label['media_url_https']
-                        response = sns.publish(
-                            TopicArn=MATCH_TOPIC_ARN,
-                            Message=msg,
-                            Subject='Found a match on twitter',
-                            MessageStructure='string',
                         )
+                        print('Match response ', json.dumps(response))
+                        if len(response['FaceMatches'])!=0:
+                            msg = "Found a match at %s" % label['media_url_https']
+                            response = sns.publish(
+                                TopicArn=MATCH_TOPIC_ARN,
+                                Message=msg,
+                                Subject='Found a match on twitter',
+                                MessageStructure='string',
+                            )
+                    except:
+                        pass
         
         tweets.append(tweet)
     
