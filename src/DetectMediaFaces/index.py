@@ -29,9 +29,11 @@ def handler(event, context):
 
         if 'image_analysis_labels' in tweet:
             for label in tweet['image_analysis_labels']:
+                print(label)
                 if label == "Person":
                     people_count +=1
-                    image_data = BytesIO(urlopen(label['media_url_https']).read())
+                    print()
+                    image_data = BytesIO(urlopen(tweet['media_url_https']).read())
                     person = {}
                     for face in detect_faces(image_data.getvalue()):
                         #store details

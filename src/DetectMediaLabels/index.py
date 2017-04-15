@@ -32,22 +32,20 @@ def handler(event, context):
     response['hasPerson'] = False
 
     for tweet in event:
-        if 'media' in tweet:
+        
+        if 'media_url_https' in tweet:
             labels = []
-            tweet['hasPerson'] = False
-            
-            for media in tweet['media']:
-                if media['type'] == 'photo':
-                    image_data = BytesIO(urlopen(media['media_url_https']).read())
+            tweet['hasPerson'] = False            
+            image_data = BytesIO(urlopen(tweet['media_url_https']).read())
 
-                    for label in detect_labels(image_data.getvalue()):
-                        if "Person" in label.values() or "People" in label.values():
-                            tweet['hasPerson'] = True
-                            response['hasPerson'] = True
+            for label in detect_labels(image_data.getvalue()):
+                if "Person" in label.values() or "People" in label.values():
+                    tweet['hasPerson'] = True
+                    response['hasPerson'] = True
 
-                        label['media_url_https'] = media['media_url_https']
-                        print(label)
-                        labels.append(label)
+                label['media_url_https'] = tweet['media_url_https']
+                print(label)
+                labels.append(label)
 
             if labels:
                 tweet['image_analysis_labels'] = [label['Name'] for label in labels]

@@ -55,17 +55,11 @@ def handler(event, context):
             data['timestamp_ms'] = tweet['timestamp_ms']
             data['lang'] = tweet['lang']
 
-            images = []
             if 'entities' in tweet and 'media' in tweet['entities']:
                 for media in  tweet['entities']['media']:
-                    image = {}
-                    image['media_url_https'] = media['media_url_https']
-                    image['id'] = media['id']
-                    image['type'] = media['type']
-                    image['url'] = media['url']
-                    images.append(image)
-
-            data['media'] = images
+                    if media['type'] == 'photo':
+                        data['media_url_https'] = media['media_url_https']
+                        break
             
             tweets.append(data)
             count += 1
