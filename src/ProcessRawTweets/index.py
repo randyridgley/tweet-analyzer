@@ -40,10 +40,14 @@ def handler(event, context):
             data['created_at'] = tweet['created_at']
             data['screen_name'] = tweet['user']['screen_name']
             data['id'] = tweet['id_str']
-            data['place_country_code'] = tweet['place']['country_code']
-            data['place_coordinates'] = tweet['place']['bounding_box']['coordinates']
-            data['place_full_name'] = tweet['place']['full_name']
             data['verified'] = tweet['user']['verified']
+            
+            if tweet.has_key('place'):
+                print('updating place attributes')
+                data['place_country_code'] = tweet['place']['country_code']
+                data['place_coordinates'] = tweet['place']['bounding_box']['coordinates']
+                data['place_full_name'] = tweet['place']['full_name']
+            
 
             if tweet['entities'].has_key('hashtags'):
                 data['hashtags'] = [hashtag['text'] for hashtag in tweet['entities']['hashtags']]
@@ -82,7 +86,7 @@ def handler(event, context):
                 Record={
                     'Data': payload
                 })
-        except:
+        except Exception as e:
             print(e)
             pass
 
