@@ -27,8 +27,8 @@ def handler(event, context):
         people = []
         people_count = 0
 
-        if 'labels' in tweet['image_analysis']:
-            for label in tweet['image_analysis']['labels']:
+        if 'image_analysis_labels' in tweet:
+            for label in tweet['image_analysis_labels']:
                 if "Person" in label.values():
                     people_count +=1
                     image_data = BytesIO(urlopen(label['media_url_https']).read())
@@ -51,8 +51,8 @@ def handler(event, context):
                             
                             person['emotions'] = emotions
                         people.append(person)
-            tweet['image_analysis']['people'] = people
-            tweet['image_analysis']['people_count'] = people_count
+            tweet['image_analysis_people'] = people
+            tweet['image_analysis_people_count'] = people_count
         
         tweets.append(tweet)
     return tweets
