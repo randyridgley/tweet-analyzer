@@ -25,7 +25,7 @@ def handler(event, context):
             for label in tweet['image_analysis_labels']:
                 if "Person" in label.values():
                     try:
-                        image_data = BytesIO(urlopen(label['media_url_https']).read())
+                        image_data = BytesIO(urlopen(tweet['media_url_https']).read())
 
                         response = rekognition.compare_faces(
                             SourceImage={
@@ -40,7 +40,7 @@ def handler(event, context):
                         )
                         print('Match response ', json.dumps(response))
                         if len(response['FaceMatches'])!=0:
-                            msg = "Found a match at %s" % label['media_url_https']
+                            msg = "Found a match at %s" % tweet['media_url_https']
                             response = sns.publish(
                                 TopicArn=MATCH_TOPIC_ARN,
                                 Message=msg,
