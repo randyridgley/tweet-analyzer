@@ -48,7 +48,9 @@ def handler(event, context):
                         label['media_url_https'] = media['media_url_https']
                         print(label)
                         labels.append(label)
-            tweet['image_analysis_labels'] = labels
+
+            if labels:
+                tweet['image_analysis_labels'] = [label['Name'] for label in labels]
 
         tweets.append(tweet)
     response['tweets'] = tweets

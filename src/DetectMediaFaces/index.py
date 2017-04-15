@@ -29,7 +29,7 @@ def handler(event, context):
 
         if 'image_analysis_labels' in tweet:
             for label in tweet['image_analysis_labels']:
-                if "Person" in label.values():
+                if label == "Person":
                     people_count +=1
                     image_data = BytesIO(urlopen(label['media_url_https']).read())
                     person = {}
