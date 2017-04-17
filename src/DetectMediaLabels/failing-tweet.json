@@ -1,0 +1,50 @@
+{
+    "lang": "en",
+    "verified": false,
+    "screen_name": "mego_rex",
+    "text": ".@GordonRamsay made Buffalo chicken dip for my birthday, looks a mess but tastes 💯 https://t.co/iByXnJOtJ2",
+    "hashtags": [],
+    "timestamp_ms": "1492106516864",
+    "place": {
+        "full_name": "Florida, USA",
+        "url": "https://api.twitter.com/1.1/geo/id/4ec01c9dbc693497.json",
+        "country": "United States",
+        "place_type": "admin",
+        "bounding_box": {
+            "type": "Polygon",
+            "coordinates": [
+                [
+                    [
+                        -87.634643,
+                        24.396308
+                    ],
+                    [
+                        -87.634643,
+                        31.001056
+                    ],
+                    [
+                        -79.974307,
+                        31.001056
+                    ],
+                    [
+                        -79.974307,
+                        24.396308
+                    ]
+                ]
+            ]
+        },
+        "country_code": "US",
+        "attributes": {},
+        "id": "4ec01c9dbc693497",
+        "name": "Florida"
+    },
+    "media": [
+        {
+            "url": "https://t.co/iByXnJOtJ2",
+            "media_url_https": "https://pbs.twimg.com/media/C9T7Y7VXsAE_6hh.jpg",
+            "type": "photo",
+            "id": 852582635142623200
+        }
+    ],
+    "id": 852582642566516700
+}

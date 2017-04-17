@@ -35,7 +35,13 @@ Parameters:
   SMS:
     Description: "SMS Number to alert for face matches in Rekognition"
     Type: "String"
+    
+  DynamoSentimentTable:
+    Description: "Table to store text sentiment of tweets"
+    Type: "String"
 
+# Fix LambdaFunctionIAMRole to have actual IAM roles
+# create TTL field on dynamodb
 Resources:
   ProcessRawTweetStreamRole:
       Type: "AWS::IAM::Role"
@@ -187,6 +193,7 @@ Resources:
                       - "rekognition:*"
                       - "s3:*"
                       - "SNS:*"
+                      - "dynamodb:*"
                     Resource: "*"
 
   RawTweetStream:
@@ -223,6 +230,28 @@ Resources:
             Resource:
               - !Join [ "", [ "arn:aws:s3:::", !Ref TweetS3Bucket ] ]
               - !Join [ "", [ "arn:aws:s3:::", !Ref TweetS3Bucket, "/*" ] ]
+
+  TextSentimentTable:
+      Type: "AWS::DynamoDB::Table"
+      Properties:
+        AttributeDefinitions:
+          -
+            AttributeName: "id"
+            AttributeType: "S"
+          -
+            AttributeName: "sentiment"
+            AttributeType: "S"
+        KeySchema:
+          -
+            AttributeName: "id"
+            KeyType: "HASH"
+          -
+            AttributeName: "sentiment"
+            KeyType: "RANGE"
+        ProvisionedThroughput:
+          ReadCapacityUnits: "5"
+          WriteCapacityUnits: "10"
+        TableName: !Ref DynamoSentimentTable
 
   RawTweetKinesisFirehose:
     Type: "AWS::KinesisFirehose::DeliveryStream"
@@ -343,6 +372,7 @@ Resources:
       Environment:
         Variables: 
           DELIVERY_STREAM_NAME: !Ref ProcessedTweetKinesisFirehose
+          DYNAMODB_SENTIMENT_TABLE: !Ref DynamoSentimentTable
 
   StateMachineIAMRole:
       Type: "AWS::IAM::Role"
