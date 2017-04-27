@@ -53,9 +53,10 @@ def handler(event, context):
                             'sentiment_value': str(item['text_analysis_sentiment_value']),
                             'text': item['text'],
                             'screen_name': item['screen_name'],
-                            'timestamp': item['timestamp_ms'],
+                            'timestamp': int(item['timestamp_ms'])/1000,
                             'latitude' : str(latitude),
-                            'longitude': str(longitude)
+                            'longitude': str(longitude),
+                            'ttl': (int(item['timestamp_ms'])/1000) + 24 * 60 * 60
                         }
                     )
    
