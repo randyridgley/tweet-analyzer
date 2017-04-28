@@ -19,6 +19,8 @@ dynamodb = boto3.resource('dynamodb', region)
 # get the Delivery Stream name from the ENV Variables
 DELIVERY_STREAM_NAME = os.environ['DELIVERY_STREAM_NAME']
 print('Delivery Stream name is ', DELIVERY_STREAM_NAME)
+
+DYNAMODB_SENTIMENT_TABLE = os.environ['DYNAMODB_SENTIMENT_TABLE']
     
 def handler(event, context):
     try:
