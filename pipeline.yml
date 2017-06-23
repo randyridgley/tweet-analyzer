@@ -110,7 +110,7 @@ Resources:
     PipelineS3Bucket:
       Type: "AWS::S3::Bucket"
       Properties: 
-          BucketName: !Ref PipelineBucketName
+          BucketName: !Ref ArtifactBucket
 
     BuildPolicy:
         Type: AWS::IAM::Policy
@@ -292,7 +292,7 @@ Resources:
                           "SMS" : "${NotifierSMS}",
                           "ApplicationName": "${ApplicationName}",
                           "EnvironmentName": "${EnvironmentName}",
-                          "ArtifactS3Bucket": "${PipelineBucketName}",
+                          "ArtifactS3Bucket": "${ArtifactBucke}",
                           "DynamoSentimentTable": "${ApplicationName}-Sentiment-${EnvironmentName}" 
                       }
                 RunOrder: 1
