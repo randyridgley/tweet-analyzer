@@ -219,6 +219,11 @@ Resources:
                 - "cloudformation:DescribeChangeSet"
                 - "cloudformation:CreateChangeSet"
               Resource: "*"
+            - Effect: Allow
+              Action:
+                - "dynamodb:DescribeTable"
+                - "dynamodb:CreateTable"
+                - "dynamodb:DeleteTable" 
 
     AppPipeline:
       Type: AWS::CodePipeline::Pipeline

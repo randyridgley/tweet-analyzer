@@ -225,7 +225,7 @@ Resources:
   TweetS3BucketPolicy:
     Type: "AWS::S3::BucketPolicy"
     Properties:
-      Bucket: !Join [ "", [ !Ref TweetS3Bucket, !Ref EnvironmentName]]
+      Bucket: !Ref TweetS3Bucket
       PolicyDocument:
         Statement:
           -
