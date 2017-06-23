@@ -3,6 +3,13 @@ Transform: AWS::Serverless-2016-10-31
 Description: State Machine for analyzing tweet sentiment by text and image
 
 Parameters:
+  ApplicationName:
+    Description: "Name of the application"
+    Type: "String"
+
+  EnvironmentName:
+    Description: "Environment of the application"
+    Type: "String"
 
   TweetBucketName:
     Description: "S3 Bucket to store raw and processed tweets"
@@ -124,7 +131,7 @@ Resources:
                     - "firehose.amazonaws.com"
                     - "s3.amazonaws.com"
           Policies:
-            - PolicyName: "ProcessAnalyzedTweetStreamRole"
+            - PolicyName: !Join [ "", ["ProcessAnalyzedTweetStreamRole", !Ref EnvironmentName]]
               PolicyDocument:
                 Version: "2012-10-17"
                 Statement:
@@ -213,12 +220,12 @@ Resources:
   TweetS3Bucket:
       Type: "AWS::S3::Bucket"
       Properties: 
-          BucketName: !Ref TweetBucketName
+          BucketName: !Join [ "", [ !Ref TweetBucketName, !Ref EnvironmentName]]
 
   TweetS3BucketPolicy:
     Type: "AWS::S3::BucketPolicy"
     Properties:
-      Bucket: !Ref TweetS3Bucket
+      Bucket: !Join [ "", [ !Ref TweetS3Bucket, !Ref EnvironmentName]]
       PolicyDocument:
         Statement:
           -
@@ -298,7 +305,7 @@ Resources:
   CompareFacesWithOwn:
     Type: AWS::Serverless::Function
     Properties:
-      FunctionName: Compare-Faces-With-Own
+      FunctionName: !Join [ "-", [ "Compare-Faces-With_Own", !Ref EnvironmentName]]
       Handler: index.handler
       Runtime: python2.7
       CodeUri: ./src/CompareFacesWithOwn
@@ -312,7 +319,7 @@ Resources:
   DetectMediaFaces:
     Type: AWS::Serverless::Function
     Properties:
-      FunctionName: Detect-Media-Faces
+      FunctionName: !Join [ "-", [ "Detect-Media-Faces", !Ref EnvironmentName]]
       Handler: index.handler
       Runtime: python2.7
       CodeUri: ./src/DetectMediaFaces
@@ -321,7 +328,7 @@ Resources:
   DetectMediaLabels:
     Type: AWS::Serverless::Function
     Properties:
-      FunctionName: Detect-Media-Labels
+      FunctionName: !Join [ "-", [ "Detect-Media-Labels", !Ref EnvironmentName]]
       Handler: index.handler
       Runtime: python2.7
       CodeUri: ./src/DetectMediaLabels
@@ -334,7 +341,7 @@ Resources:
   GetTweetSentiment:
     Type: AWS::Serverless::Function
     Properties:
-      FunctionName: Get-Tweet-Sentiment
+      FunctionName: !Join [ "-", [ "Get-Tweet-Sentiment", !Ref EnvironmentName]]
       Handler: index.handler
       Runtime: python2.7
       CodeUri: ./src/GetTweetSentiment/
@@ -343,7 +350,7 @@ Resources:
   ProcessRawTweets:
     Type: AWS::Serverless::Function
     Properties:
-      FunctionName: Process-Raw-Tweets
+      FunctionName: !Join [ "-", [ "Process-Raw-Tweets", !Ref EnvironmentName]]
       Handler: index.handler
       Runtime: python2.7
       CodeUri: ./src/ProcessRawTweets
@@ -363,7 +370,7 @@ Resources:
   PushToFirehose:
     Type: AWS::Serverless::Function
     Properties:
-      FunctionName: Push-To-Firehose
+      FunctionName: !Join [ "-", [ "Push-To-Firehose", !Ref EnvironmentName]]
       Handler: index.handler
       Runtime: python2.7
       CodeUri: ./src/PushToFirehose

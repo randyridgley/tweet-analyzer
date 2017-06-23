@@ -292,7 +292,6 @@ Resources:
                           "SMS" : "${NotifierSMS}",
                           "ApplicationName": "${ApplicationName}",
                           "EnvironmentName": "${EnvironmentName}",
-                          "ArtifactS3Bucket": "${ArtifactBucke}",
                           "DynamoSentimentTable": "${ApplicationName}-Sentiment-${EnvironmentName}" 
                       }
                 RunOrder: 1
