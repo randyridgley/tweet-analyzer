@@ -2,7 +2,7 @@ version: 0.1
 phases:
   install:
     commands:
-      - aws cloudformation package --template-file tweet_analysis.yaml --s3-bucket tweet-analyzer 
+      - aws cloudformation package --template-file tweet_analysis.yaml --s3-bucket tweet-analyzer-demo
                                    --output-template-file analyzer_template.yaml
 artifacts:
   type: zip

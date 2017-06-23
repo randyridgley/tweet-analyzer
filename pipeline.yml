@@ -52,6 +52,48 @@ Parameters:
         Description: "SMS Number to alert for face matches in Rekognition"
         Type: "String"
 
+Metadata: 
+  AWS::CloudFormation::Interface: 
+    ParameterGroups: 
+      -
+        Label: 
+          default: "Application Properties"
+        Parameters:
+          - ApplicationName
+          - EnvironmentName
+      - 
+        Label: 
+          default: "GitHub"
+        Parameters: 
+          - GitHubUser
+          - GitHubToken
+          - Repo
+          - Branch
+      - 
+        Label: 
+          default: "Pipeline"
+        Parameters: 
+          - PipelineBucketName
+          - TweetBucketName
+      -
+        Label: 
+          default: "Notification"
+        Parameters:
+          - NotifierEmail
+          - NotifierSMS
+      -
+        Label:
+          default: "Rekognition Properties"
+        Parameters:
+          - ComparisonFaceS3Bucket
+          - ComparisonFaceKey
+          - SimilarityThreshold
+          - MaxLabelDetection
+          - MinLabelConfidence
+    ParameterLabels: 
+      VPCID: 
+        default: "Which VPC should this be deployed to?"
+
 Resources:
     BuildRole:
         Type: AWS::IAM::Role
@@ -249,7 +291,7 @@ Resources:
                           "Email" : "${NotifierEmail}",
                           "SMS" : "${NotifierSMS}",
                           "ApplicationName": "${ApplicationName}",
-                          "EnvironmentName": "staging",
+                          "EnvironmentName": "${EnvironmentName}",
                           "ArtifactS3Bucket": "${PipelineBucketName}"
                       }
                 RunOrder: 1
