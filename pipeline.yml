@@ -294,7 +294,7 @@ Resources:
                           "ApplicationName": "${ApplicationName}",
                           "EnvironmentName": "${EnvironmentName}",
                           "ArtifactS3Bucket": "${PipelineBucketName}",
-                          "DynamoSentimentTable": "${ApplicationName}-${EnvironmentName}-Sentiment" 
+                          "DynamoSentimentTable": "${ApplicationName}-Sentiment-${EnvironmentName}" 
                       }
                 RunOrder: 1
 
