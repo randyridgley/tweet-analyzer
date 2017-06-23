@@ -297,7 +297,7 @@ Resources:
                           "SMS" : "${NotifierSMS}",
                           "ApplicationName": "${ApplicationName}",
                           "EnvironmentName": "${EnvironmentName}",
-                          "DynamoSentimentTable": "${ApplicationName}-Sentiment-${EnvironmentName}" 
+                          "DynamoSentimentTable": "${ApplicationName}-sentiment-${EnvironmentName}" 
                       }
                 RunOrder: 1
 
