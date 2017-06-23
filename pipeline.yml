@@ -111,7 +111,7 @@ Resources:
               - sts:AssumeRole
           Path: "/"
 
-    TweetS3Bucket:
+    PipelineS3Bucket:
       Type: "AWS::S3::Bucket"
       Properties: 
           BucketName: !Ref PipelineBucketName
