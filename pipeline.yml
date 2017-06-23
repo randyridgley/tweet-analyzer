@@ -221,6 +221,7 @@ Resources:
               Action:
                 - "cloudformation:DescribeStacks"
                 - "cloudformation:DescribeChangeSet"
+                - "cloudformation:CreateChangeSet"
               Resource: "*"
 
     AppPipeline:
