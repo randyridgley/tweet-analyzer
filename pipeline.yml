@@ -24,7 +24,7 @@ Parameters:
         Type: String
         Description: Branch to use from Repo. Only the Name. not the URL
         Default: master
-    PipelineBucketName:
+    ArtifactBucket:
         Description: "S3 Bucket to store pipeline content"
         Type: "String"
     TweetBucketName:
@@ -61,6 +61,8 @@ Metadata:
         Parameters:
           - ApplicationName
           - EnvironmentName
+          - TweetBucketName
+          - ArtifactBucket
       - 
         Label: 
           default: "GitHub"
@@ -69,12 +71,6 @@ Metadata:
           - GitHubToken
           - Repo
           - Branch
-      - 
-        Label: 
-          default: "Pipeline"
-        Parameters: 
-          - PipelineBucketName
-          - TweetBucketName
       -
         Label: 
           default: "Notification"
@@ -229,6 +225,9 @@ Resources:
       Properties:
         Name: !Ref AWS::StackName
         RoleArn: !Sub ${BuildRole.Arn}
+        ArtifactStore:
+          Type: S3
+          Location: !Ref ArtifactBucket
         Stages:
           - Name: Source
             Actions:
@@ -297,10 +296,6 @@ Resources:
                           "DynamoSentimentTable": "${ApplicationName}-Sentiment-${EnvironmentName}" 
                       }
                 RunOrder: 1
-
-        ArtifactStore:
-          Type: S3
-          Location: !Ref PipelineBucketName
 
     Build:
       Type: AWS::CodeBuild::Project
