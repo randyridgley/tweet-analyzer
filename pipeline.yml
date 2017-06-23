@@ -293,7 +293,8 @@ Resources:
                           "SMS" : "${NotifierSMS}",
                           "ApplicationName": "${ApplicationName}",
                           "EnvironmentName": "${EnvironmentName}",
-                          "ArtifactS3Bucket": "${PipelineBucketName}"
+                          "ArtifactS3Bucket": "${PipelineBucketName}",
+                          "DynamoSentimentTable": "${ApplicationName}-${EnvironmentName}-Sentiment" 
                       }
                 RunOrder: 1
 
